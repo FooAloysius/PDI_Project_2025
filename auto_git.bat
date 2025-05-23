@@ -1,8 +1,8 @@
 @REM USE FOR GIT AUTO COMMIT AND AUTO PUSH TO GITHUB REPOSITORY
-
+@REM THIS CODE IS USING ABANG TO GENERATE FOR EASY WAYS TO MAKE COMMITMENT
 
 @echo off
-:: 获取当前日期和时间，格式如：2025-05-23 14:35:12
+:: get current time and date：2025-05-23 14:35:12
 for /f "tokens=1-4 delims=/-. " %%a in ("%date%") do (
     set YYYY=%%d
     set MM=%%b

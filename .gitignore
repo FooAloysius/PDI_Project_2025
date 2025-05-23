@@ -1,0 +1,13 @@
+##############################
+## gitignore for Java VERSION
+## THIS CODE IS ALSO USE FOR GIT
+## FOR IGNORE THE BELOW LIST OF FILE TYPE
+##############################
+.mtj.tmp/
+*.class
+*.jar
+*.war
+*.ear
+*.nar
+hs_err_pid*
+replay_pid*

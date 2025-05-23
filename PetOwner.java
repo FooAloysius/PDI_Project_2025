@@ -57,4 +57,43 @@ public class PetOwner {
     this.petOwnerContact = pPetOwnerContact;
   }
 
+  /*
+  * DEFAULT CONSTRUCTOR
+  * CONSTRUCTOR: PetOwner
+  * IMPORT: none
+  * EXPORT: none
+  * ASSERTION: Initialize default pet owner details
+  */
+  public PetOwner () {
+    petOwnerID = 1234567;
+    petOwnerName = "Abang";
+    petOwnerContact = 0121111111;
+  }
+
+  /*
+  * PARAMETER CONSTRUCTOR
+  * CONSTRUCTOR: PetOwner
+  * IMPORT: pPetOwnerID (int), pPetOwnerName (String), pPetOwnerContact (int)
+  * EXPORT: none
+  * ASSERTION: Constructor with parameter
+  */
+  public PetOwner (int pPetOwnerID, String pPetOwnerName, int pPetOwnerContact) {
+    petOwnerID = pPetOwnerID;
+    petOwnerName = pPetOwnerName;
+    petOwnerContact = pPetOwnerContact;
+  }
+
+  /*
+  * COPY CONSTRUCTOR
+  * CONSTRUCTOR: PetOwner
+  * IMPORT: PetOwner (COPY FROM PetOwner)
+  * EXPORT: none
+  * ASSERTION: Constructor with parameter
+  */
+  public PetOwner (PetOwner pPetOwner) {
+    petOwnerID = pPetOwner.getPetOwnerID();
+    petOwnerName = pPetOwner.getPetOwnerName();
+    petOwnerContact = pPetOwner.getPetOwnerContact();
+  }
+
 }
