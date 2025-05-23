@@ -28,7 +28,7 @@ if errorlevel 1 (
     echo Adding origin...
     git remote add origin https://github.com/FooAloysius/PDI_Project_2025.git
 ) else (
-    echo ^<ESC^>[92m Origin already exists, skipping add.
+    echo ^<ESC^>[92m [92mGreen[0m Origin already exists, skipping add.
 )
 
 :: 推送到 master 分支（根据需要改为 main）
