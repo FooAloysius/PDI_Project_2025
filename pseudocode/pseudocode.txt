@@ -1,4 +1,7 @@
-
+Author: Foo
+Purpose: All the method for accessing/mutating pet owner info
+Created: 15/05/2025
+Modified: 23/05/2025
 CLASS PetOwner:
     petOwnerID (int)
     petOwnerName (String)
@@ -76,6 +79,10 @@ CLASS PetOwner:
         SET petOwnerName <- PetOwner.getPetOwnerName
         SET petOwnerContact <- PetOwner.getPetOwnerContact
 
+Author: Foo
+Purpose: All the method for accessing/mutating pets info
+Created: 15/05/2025
+Modified: 23/05/2025
 CLASS Pet
     petID (int)
     petName (String)
@@ -207,7 +214,10 @@ CLASS Pet
         SET petAge <- Pet.getPetAge
         SER petOwnerID <- Pet.getPetOwnerID
 
-
+Author: Jun Xiang
+Purpose: All the method for accessing treatment info
+Created: 15/05/2025
+Modified: 23/05/2025
 CLASS Treatment
 
   CLASS FIELDS:
@@ -292,7 +302,10 @@ CLASS Treatment
 END CLASS
 
 
-
+Author: Jun Xiang
+Purpose: All the method for accessing/mutating transaction info
+Created: 15/05/2025
+Modified: 23/05/2025
 CLASS Transaction
 
   CLASS FIELDS:
@@ -408,7 +421,10 @@ CLASS Transaction
 END CLASS
 
 
-
+Author: Angel
+Purpose: All the method for accessing/mutating receipt info
+Created: 15/05/2025
+Modified: 23/05/2025
 CLASS Receipt
 
         ATTRIBUTES:
@@ -490,6 +506,10 @@ CLASS Receipt
 END CLASS
 
 
+Author: Angel
+Purpose: All the method for accessing/mutating payment info
+Created: 15/05/2025
+Modified: 23/05/2025
 CLASS Payment
 
         ATTRIBUTES:
