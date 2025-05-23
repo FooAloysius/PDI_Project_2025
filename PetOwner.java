@@ -2,6 +2,7 @@ public class PetOwner {
   private int petOwnerID;
   private String petOwnerName;
   private int petOwnerContact;
+  private static Pet[] petsBelongTo = new Pet[];
 
   /*
   * ACCESSOR: getPetOwnerID
@@ -68,6 +69,7 @@ public class PetOwner {
     petOwnerID = 1234567;
     petOwnerName = "Abang";
     petOwnerContact = 0121111111;
+    petsBelongTo = {};
   }
 
   /*
