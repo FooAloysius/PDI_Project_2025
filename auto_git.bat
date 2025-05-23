@@ -17,11 +17,11 @@ set TIMESTAMP=%YYYY%-%MM%-%DD% %HH%:%Min%
 set COMMIT_MSG=Auto commit on %date% %time%
 if not "%~1"=="%COMMIT_MSG%" set COMMIT_MSG=%~1 *commit at: %TIMESTAMP%
 
-:: 添加所有变更并提交
+:: add all the files changed to the stage and commit
 git add .
 git commit -m "%COMMIT_MSG%"
 
-:: 检查是否已经设置 origin
+:: checking is remote "origin" exist?
 git remote get-url origin >nul 2>&1
 if errorlevel 1 (
     echo [93m **Adding origin... [0m
@@ -30,5 +30,5 @@ if errorlevel 1 (
     echo [92m **Origin already exists, skipping add. [0m
 )
 
-:: 推送到 master 分支（根据需要改为 main）
+:: push to GitHub Repository branch master
 git push origin master
