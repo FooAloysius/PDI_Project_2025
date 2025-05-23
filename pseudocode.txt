@@ -1,0 +1,601 @@
+CLASS PetOwner:
+    petOwnerID (int)
+    petOwnerName (String)
+    petOwnerContact (int)
+
+    ACCESSOR: getPetOwnerID
+    IMPORT: none
+    EXPORT: petOwnerID
+    ALGORITHM:
+        RETURN petOwnerID
+    END getPetOwnerID
+    
+    ACCESSOR: getPetOwnerName
+    IMPORT: none
+    EXPORT: petOwnerName (String)
+    ALGORITHM:
+        RETURN petOwnerName
+    END getPetOwnerName
+
+    ACCESSOR: getPetOwnerContact
+    IMPORT: none
+    EXPORT: petOwnerContact (int)
+    ALGORITHM:
+        RETURN petOwnerContact
+    END getPetOwnerContact
+
+    MUTATOR: setPetOwnerID
+    IMPORT: pPetOwnerID
+    EXPORT: none
+    ALGORITHM:
+        petOwnerID <- pPetOwnerID
+    END setPetOwnerID
+
+    MUTATOR: setPetOwnerName
+    IMPORT: pPetOwnerName
+    EXPORT: none
+    ALGORITHM:
+        petOwnerName <- pPetOwnerName
+    END setPetOwnerName
+
+    MUTATOR: setPetOwnerContact
+    IMPORT: pPetOwnerContact
+    EXPORT: none
+    ALGORITHM:
+        petOwnerContact <- pPetOwnerContact
+    END setPetOwnerContact
+
+    DEFAULT CONSTRUCTOR
+    CONSTRUCTOR: PetOwner
+    IMPORT: none
+    EXPORT: none
+    ASSERTION: Initialize default pet owner details
+    ALGORITHM:
+        SET petOwnerID <- 1292848
+        SET petOwnerName <- "Abang"
+        SET petOwnerContact <- 0123456789
+
+    PARAMETER CONSTRUCTOR
+    CONSTRUCTOR: PetOwner
+    IMPORT: pPetOwnerID (int), pPetOwnerName (String), pPetOwnerContact (int)
+    EXPORT: none
+    ASSERTION: Constructor with parameter
+    ALGORITHM:
+        SET petOwnerID <- pPetOwnerID
+        SET petOwnerName <- pPetOwnerName
+        SET petOwnerContact <- pPetOwnerContact
+
+    COPY CONSTRUCTOR
+    CONSTRUCTOR: PetOwner
+    IMPORT: PetOwner (COPY FROM PetOwner)
+    EXPORT: none
+    ASSERTION: Constructor with parameter
+    ALGORITHM:
+        SET petOwnerID <- PetOwner.getPetOwnerID
+        SET petOwnerName <- PetOwner.getPetOwnerName
+        SET petOwnerContact <- PetOwner.getPetOwnerContact
+
+CLASS Pet
+    petID (int)
+    petName (String)
+    petSpecies (String)
+    petBreed (String)
+    petAge (int)
+    petOwnerID (int)
+
+    ACCESSOR: getPetID
+    IMPORT: none
+    EXPORT: petID
+    ALGORITHM:
+        RETURN petID
+    END getPetID
+
+    ACCESSOR: getPetName
+    IMPORT: none
+    EXPORT: petName
+    ALGORITHM:
+        RETURN petName
+    END getPetName
+    
+    ACCESSOR: getPetSpecies
+    IMPORT: none
+    EXPORT: petSpecies
+    ALGORITHM:
+        RETURN petSpecies
+    END getPetSpecies
+    
+    ACCESSOR: getPetBreed
+    IMPORT: none
+    EXPORT: petBreed
+    ALGORITHM:
+        RETURN petBreed
+    END getPetBreed
+    
+    ACCESSOR: getPetAge
+    IMPORT: none
+    EXPORT: petAge
+    ALGORITHM:
+        RETURN petAge
+    END getPetAge
+
+    ACCESSOR: getPetOwnerID
+    IMPORT: none
+    EXPORT: petOwnerID
+    ALGORITHM:
+        RETURN petOwnerID
+    END getPetOwnerID
+
+    MUTATOR: setPetID
+        IMPORT: pPetID
+        EXPORT: none
+        ALGORITHM:
+            petID <- pPetID
+        END setPetID
+
+    MUTATOR: setPetName
+        IMPORT: pPetName
+        EXPORT: none
+        ALGORITHM:
+            petName <- pPetName
+        END setPetName
+
+    MUTATOR: setPetSpecies
+        IMPORT: pPetSpecies
+        EXPORT: none
+        ALGORITHM:
+            petSpecies <- pPetSpecies
+        END setPetSpecies
+
+    MUTATOR: setPetBreed
+        IMPORT: pPetBreed
+        EXPORT: none
+        ALGORITHM:
+            petBreed <- pPetBreed
+        END setPetBreed
+
+    MUTATOR: setPetAge
+        IMPORT: pPetAge
+        EXPORT: none
+        ALGORITHM:
+            petAge <- pPetAge
+        END setPetAge
+
+    MUTATOR: setPetOwnerID
+        IMPORT: pPetOwnerID
+        EXPORT: none
+        ALGORITHM:
+            petOwnerID <- pPetOwnerID
+        END setPetOwnerID
+
+    DEFAULT CONSTRUCTOR
+    CONSTRUCTOR: Pet
+    IMPORT: none
+    EXPORT: none
+    ASSERTION: Initialize default pet details
+    ALGORITHM:
+        SET petID <- 325325
+        SET petName <- "Abang-cat"
+        SET petSpecies <- "cat"
+        SET petBreed <- "Siamese cat"
+        SET petAge <- 40
+        SER petOwnerID <- 1292848
+
+    PARAMETER CONSTRUCTOR
+    CONSTRUCTOR: PetOwner
+    IMPORT: pPetID (int), pPetName (String), pPetSpecies (String), pPetBreed (String), pPetAge (int), pPetOwnerID (int)
+    EXPORT: none
+    ASSERTION: Constructor with parameter
+    ALGORITHM:
+        SET petID <- pPetID
+        SET petName <- pPetName
+        SET petSpecies <- pPetSpecies
+        SET petBreed <- pPetBreed
+        SET petAge <- pPetAge
+        SER petOwnerID <- pPetOwnerID
+
+    COPY CONSTRUCTOR
+    CONSTRUCTOR: PetOwner
+    IMPORT: Pet (COPY FROM Pet)
+    EXPORT: none
+    ASSERTION: Constructor with parameter
+    ALGORITHM:
+        SET petID <- Pet.getPetID
+        SET petName <- Pet.getPetName
+        SET petSpecies <- Pet.getPetSpecies
+        SET petBreed <- Pet.getPetBreed
+        SET petAge <- Pet.getPetAge
+        SER petOwnerID <- Pet.getPetOwnerID
+
+
+CLASS Treatment
+
+  CLASS FIELDS:
+    treatmentID (String)
+    treatmentName (String)
+    treatmentFee (Double)
+
+  METHODS:
+
+    Treatment()
+      IMPORT: none
+      EXPORT: none
+      ALGORITHM:
+        treatmentID ← ""
+        treatmentName ← ""
+        treatmentFee ← 0.0
+    END Treatment
+
+    Treatment(id: String, name: String, fee: Double)
+      IMPORT: id, name, fee
+      EXPORT: none
+      ALGORITHM:
+        setTreatmentID(id)
+        setTreatmentName(name)
+        setTreatmentFee(fee)
+    END Treatment
+
+    Treatment(copy: Treatment)
+      IMPORT: copy
+      EXPORT: none
+      ALGORITHM:
+        treatmentID ← copy.getTreatmentID()
+        treatmentName ← copy.getTreatmentName()
+        treatmentFee ← copy.getTreatmentFee()
+    END Treatment
+
+    getTreatmentID()
+      IMPORT: none
+      EXPORT: String
+      ALGORITHM:
+        RETURN treatmentID
+    END getTreatmentID
+
+    setTreatmentID(id: String)
+      IMPORT: id
+      EXPORT: none
+      ALGORITHM:
+        IF id IS NOT EMPTY THEN
+          treatmentID ← id
+    END setTreatmentID
+
+    getTreatmentName()
+      IMPORT: none
+      EXPORT: String
+      ALGORITHM:
+        RETURN treatmentName
+    END getTreatmentName
+
+    setTreatmentName(name: String)
+      IMPORT: name
+      EXPORT: none
+      ALGORITHM:
+        IF name IS NOT EMPTY THEN
+          treatmentName ← name
+    END setTreatmentName
+
+    getTreatmentFee()
+      IMPORT: none
+      EXPORT: Double
+      ALGORITHM:
+        RETURN treatmentFee
+    END getTreatmentFee
+
+    setTreatmentFee(fee: Double)
+      IMPORT: fee
+      EXPORT: none
+      ALGORITHM:
+        IF fee >= 0.0 THEN
+          treatmentFee ← fee
+    END setTreatmentFee
+
+END CLASS
+
+
+
+CLASS Transaction
+
+  CLASS FIELDS:
+    transactionID (String)
+    treatmentList (Array of Treatment)
+    totalAmount (Double)
+    taxAmount (Double)
+    consultationFee (Double)
+    finalAmount (Double)
+
+  METHODS:
+
+    Transaction()
+      IMPORT: none
+      EXPORT: none
+      ALGORITHM:
+        transactionID ← ""
+        treatmentList ← empty array
+        totalAmount ← 0.0
+        taxAmount ← 0.0
+        consultationFee ← 0.0
+        finalAmount ← 0.0
+    END Transaction
+
+    Transaction(id: String, list: Array of Treatment, consultFee: Double)
+      IMPORT: id, list, consultFee
+      EXPORT: none
+      ALGORITHM:
+        setTransactionID(id)
+        setTreatmentList(list)
+        setConsultationFee(consultFee)
+        calculateTotalAmount()
+        calculateFinalAmount()
+    END Transaction
+
+    Transaction(copy: Transaction)
+      IMPORT: copy
+      EXPORT: none
+      ALGORITHM:
+        transactionID ← copy.getTransactionID()
+        treatmentList ← copy.getTreatmentList()
+        totalAmount ← copy.calculateTotalAmount()
+        consultationFee ← copy.getConsultationFee()
+        taxAmount ← totalAmount * 0.06
+        finalAmount ← totalAmount + taxAmount + consultationFee
+    END Transaction
+
+    getTransactionID()
+      IMPORT: none
+      EXPORT: String
+      ALGORITHM:
+        RETURN transactionID
+    END getTransactionID
+
+    setTransactionID(id: String)
+      IMPORT: id
+      EXPORT: none
+      ALGORITHM:
+        IF id IS NOT EMPTY THEN
+          transactionID ← id
+    END setTransactionID
+
+    getTreatmentList()
+      IMPORT: none
+      EXPORT: Array of Treatment
+      ALGORITHM:
+        RETURN treatmentList
+    END getTreatmentList
+
+    setTreatmentList(list: Array of Treatment)
+      IMPORT: list
+      EXPORT: none
+      ALGORITHM:
+        treatmentList ← list
+    END setTreatmentList
+
+    calculateTotalAmount()
+      IMPORT: none
+      EXPORT: Double
+      ALGORITHM:
+        total ← 0.0
+        FOR EACH treatment IN treatmentList DO
+          total ← total + treatment.getTreatmentFee()
+        END FOR
+        totalAmount ← total
+        RETURN totalAmount
+    END calculateTotalAmount
+
+    calculateFinalAmount()
+      IMPORT: none
+      EXPORT: Double
+      ALGORITHM:
+        taxAmount ← totalAmount * 0.06
+        finalAmount ← totalAmount + taxAmount + consultationFee
+        RETURN finalAmount
+    END calculateFinalAmount
+
+    setConsultationFee(fee: Double)
+      IMPORT: fee
+      EXPORT: none
+      ALGORITHM:
+        IF fee >= 0 THEN
+          consultationFee ← fee
+    END setConsultationFee
+
+    getConsultationFee()
+      IMPORT: none
+      EXPORT: Double
+      ALGORITHM:
+        RETURN consultationFee
+    END getConsultationFee
+
+END CLASS
+
+
+
+CLASS Receipt
+
+        ATTRIBUTES:
+                Transaction transaction
+                Payment payment
+
+        // DEFAULT CONSTRUCTOR
+        CONSTRUCTOR()
+            SET transaction = null
+            SET payment = null
+        END CONSTRUCTOR
+
+        // PARAMETER CONSTRUCTOR
+        CONSTRUCTOR(transaction, payment)
+            SET this.transaction = transaction
+            SET this.payment = payment
+
+        // COPY CONSTRUCTOR
+        CONSTRUCTOR(otherReceipt)
+            SET this.transaction = otherReceipt.transaction
+            SET this.payment = otherReceipt.payment
+        END CONSTRUCTOR
+
+
+        METHOD generateReceiptText()
+                SORT transaction.treatments BY treatment.name ASCENDING  
+
+                CREATE receiptText AS STRING
+                INCLUDE "=== Animal Clinic Receipt ===" IN receiptText
+                INCLUDE "Date of Visit: " + transaction.dateOfVisit IN receiptText
+                INCLUDE "Pet Owner: " + transaction.owner.name IN receiptText
+                INCLUDE "Pet Name: " + transaction.pet.name IN receiptText
+
+                INCLUDE "--- Treatments ---" IN receiptText
+
+                FOR EACH treatment IN transaction.treatments DO
+                        SET quantity = transaction.getQuantityForTreatment(treatment)
+                        SET cost = treatment.cost * quantity
+                        FORMAT cost TO 2 decimal places   // Payment amount will be in 2 decimal places format
+                        INCLUDE treatment.name + " x " + quantity + " - RM " + cost IN receiptText
+                END FOR
+
+                FORMAT transaction.consultationFee TO 2 decimal places   // Payment amount will be in 2 decimal places format
+                FORMAT transaction.subtotal TO 2 decimal places          // Payment amount will be in 2 decimal places format
+                FORMAT transaction.taxAmount TO 2 decimal places         // Payment amount will be in 2 decimal places format
+                FORMAT transaction.totalCost TO 2 decimal places         // Payment amount will be in 2 decimal places format
+
+                INCLUDE "Consultation Fee: RM " + transaction.consultationFee IN receiptText
+                INCLUDE "Subtotal (Before Tax): RM " + transaction.subtotal IN receiptText
+                INCLUDE "Tax (10%): RM " + transaction.taxAmount IN receiptText
+                INCLUDE "Total: RM " + transaction.totalCost IN receiptText
+
+                INCLUDE "--- Payment Details ---" IN receiptText
+                INCLUDE payment.getPaymentSummary() IN receiptText
+
+                RETURN receiptText
+        END METHOD
+
+
+        // GETTERS
+        METHOD getTransaction()
+                RETURN transaction
+        END METHOD
+
+        METHOD getPayment()
+                RETURN payment
+        END METHOD
+
+
+        // SETTERS
+        METHOD setTransaction(value)
+                SET transaction = value
+        END METHOD
+
+        METHOD setPayment(value)
+                SET payment = value
+        END METHOD
+
+END CLASS
+
+
+CLASS Payment
+
+        ATTRIBUTES:
+                String paymentMethod
+                Double amountPaid
+                Double balanceReturned
+                String paymentDate
+                String status
+
+        // DEFAULT CONSTRUCTOR
+        CONSTRUCTOR()
+            SET paymentMethod = ""
+            SET amountPaid = 0.0
+            SET paymentDate = ""
+            SET status = "Pending"
+            SET balancedReturned = 0.0
+        END CONSTRUCTOR
+
+        // PARAMETER CONSTRUCTOR
+        CONSTRUCTOR(paymentMethod, amountPaid, paymentDate)
+            SET this.paymentMethod = paymentMethod
+            SET this.amountPaid = amountPaid
+            SET this.paymentDate = paymentDate
+            SET this.status = "Pending"
+            SET this.balanceReturned = 0.0
+
+        // COPY CONSTRUCTOR
+        CONSTRUCTOR(otherPayment)
+            SET this.paymentMethod = otherPayment.paymentMethod
+            SET this.amountPaid = otherPayment.amountPaid
+            SET this.paymentDate = otherPayment.paymentDate
+            SET this.status = otherPayment.status
+            SET this.balanceReturned = otherPayment.balanceReturned
+        END CONSTRUCTOR
+
+        METHOD processPayment(totalCost)
+                IF paymentMethod = "Cash" THEN
+                        IF amountPaid >= totalCost THEN
+                                balanceReturned = amountPaid - totalCost
+                                FORMAT balanceReturned TO 2 decimal places   // Payment amount will be in 2 decimal places format
+                                status = "Paid"
+                        ELSE
+                                PRINT "Error: Insufficient cash payment."
+                                status = "Failed"
+                ELSE IF paymentMethod = "Card" THEN
+                        balanceReturned = 0.0
+                        status = "Paid"
+                ELSE
+                        PRINT "Error: Unknown payment method."
+                        status = "Failed"
+                END IF
+        END METHOD
+
+        METHOD getPaymentSummary()
+                FORMAT amountPaid TO 2 decimal places        // Payment amount will be in 2 decimal places format
+                FORMAT balanceReturned TO 2 decimal places   // Payment amount will be in 2 decimal places format
+
+                RETURN  "Payment Method: " + paymentMethod +
+                        "\nAmount Paid: RM " + amountPaid +
+                        "\nBalance Returned: RM " + balanceReturned +
+                        "\nPayment Date: " + paymentDate +
+                        "\nStatus: " + status
+        END METHOD
+
+
+        // GETTERS
+        METHOD getPaymentMethod()
+                RETURN paymentMethod
+        END METHOD
+
+        METHOD getAmountPaid()
+                RETURN amountPaid
+        END METHOD
+
+        METHOD getBalanceReturned()
+                RETURN balanceReturned
+        END METHOD
+
+        METHOD getPaymentDate()
+                RETURN paymentDate
+        END METHOD
+
+        METHOD getStatus()
+                RETURN status
+        END METHOD
+
+
+        // SETTERS
+        METHOD setPaymentMethod(value)
+                SET paymentMethod = value
+        END METHOD
+
+        METHOD setAmountPaid(value)
+                SET amountPaid = value
+        END METHOD
+
+        METHOD setBalanceReturned(value)
+                SET balanceReturned = value
+        END METHOD
+
+        METHOD setPaymentDate(value)
+                SET paymentDate = value
+        END METHOD
+
+        METHOD setStatus(value)
+                SET status = value
+        END METHOD
+
+END CLASS
+
