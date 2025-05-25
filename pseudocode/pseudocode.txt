@@ -7,6 +7,8 @@ CLASS Main:
     DECLARE PetsFileName as String = 'Pets.csv'
     DECLARE CustomersFileName as String = 'Customers.csv'
     DECLARE TreatmentFileName as String = 'Treatments.csv'
+    DECLARE pets (ARRAY OF Pet OF SIZE 40)
+
     DECLARE petCount as INTEGER = 0
 
   PROCEDURE: ImportPets
@@ -35,8 +37,9 @@ CLASS Main:
       DECLARE petBreed AS STRING = TRIM OF parts[3]
       DECLARE petAge AS INTEGER = TRIM OF parts[4]
       DECLARE petOwnerID AS STRING = TRIM OF parts[5]
-      DECLARE petCount ++
-      NEW Pet(petID, petName, petSpecies, petBreed, petAge, petOwnerID)
+
+      CONSTRUCT pets[petCount ++] USING petID, petName, petSpecies, petBreed, petAge, petOwnerID
+
     END WHILE
     CLOSE PetsFilePath
 
