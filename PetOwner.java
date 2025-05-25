@@ -2,7 +2,7 @@ public class PetOwner {
   private int petOwnerID;
   private String petOwnerName;
   private int petOwnerContact;
-  private static Pet[] petsBelongTo = new Pet[];
+  private static Pet [] petsBelongTo = new Pet[countOfPets];
 
   /*
   * ACCESSOR: getPetOwnerID

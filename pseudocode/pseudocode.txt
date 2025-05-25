@@ -1,3 +1,48 @@
+AUthor: Foo, JunXiang, Angel
+Created: 24/05/2025
+Modified: 24/05/2025
+CLASS Main:
+  Class Feild:
+    DECLARE CSVPath as String = 'csv/'
+    DECLARE PetsFileName as String = 'Pets.csv'
+    DECLARE CustomersFileName as String = 'Customers.csv'
+    DECLARE TreatmentFileName as String = 'Treatments.csv'
+
+  PROCEDURE: ImportPets
+  IMPORT: fileName
+  EXPORT: none
+  ALGORITHM: 
+    DECLARE PetFilePath as String = CSVPath + PetsFileName
+    DECLARE lineCount as INTEGER = 0
+    DECLARE line as String
+
+    OPEN PetFilePath FOR READING WHILE EOF(PetsFilePath)
+    WHILE NOT EOF(PetsFilePath)
+      READ line
+      lineCount ++
+      petID = line[0]
+      petName = line[1]
+      petSpecies =line[2]
+      petBreed = line[3]
+      petAge = line[4]
+      petOwnerID = line[5]
+      NEW Pet(petID, petName, petSpecies, petBreed, petAge, petOwnerID)
+    END WHILE
+    CLOSE PetsFilePath
+
+    DECLARE ARRAY OF PET
+
+    
+
+    IF lineCount = 0 THEN
+      OUTPUT "file is empty!"
+      RETURN
+    END IF
+
+    
+
+
+
 Author: Foo
 Purpose: All the method for accessing/mutating pet owner info
 Created: 15/05/2025
@@ -82,14 +127,14 @@ CLASS PetOwner:
 Author: Foo
 Purpose: All the method for accessing/mutating pets info
 Created: 15/05/2025
-Modified: 23/05/2025
+Modified: 25/05/2025
 CLASS Pet
-    petID (int)
+    petID (String)
     petName (String)
     petSpecies (String)
     petBreed (String)
     petAge (int)
-    petOwnerID (int)
+    petOwnerID (String)
 
     ACCESSOR: getPetID
     IMPORT: none
@@ -181,16 +226,16 @@ CLASS Pet
     EXPORT: none
     ASSERTION: Initialize default pet details
     ALGORITHM:
-        SET petID <- 325325
-        SET petName <- "Abang-cat"
+        SET petID <- "pet_123456"
+        SET petName <- "Kitty"
         SET petSpecies <- "cat"
         SET petBreed <- "Siamese cat"
         SET petAge <- 40
-        SER petOwnerID <- 1292848
+        SER petOwnerID <- "Customer_123456"
 
     PARAMETER CONSTRUCTOR
-    CONSTRUCTOR: PetOwner
-    IMPORT: pPetID (int), pPetName (String), pPetSpecies (String), pPetBreed (String), pPetAge (int), pPetOwnerID (int)
+    CONSTRUCTOR: Pet
+    IMPORT: pPetID (String), pPetName (String), pPetSpecies (String), pPetBreed (String), pPetAge (int), pPetOwnerID (String)
     EXPORT: none
     ASSERTION: Constructor with parameter
     ALGORITHM:
@@ -202,7 +247,7 @@ CLASS Pet
         SER petOwnerID <- pPetOwnerID
 
     COPY CONSTRUCTOR
-    CONSTRUCTOR: PetOwner
+    CONSTRUCTOR: Pet
     IMPORT: Pet (COPY FROM Pet)
     EXPORT: none
     ASSERTION: Constructor with parameter
