@@ -5,7 +5,7 @@ public class Main {
   private static String PetsFileName = "Pets.csv";
   private static String CustomersFileName = "Customers.csv";
   private static String TreatmentFileName = "Treatments.csv";
-  private static Pet[] pets =new Pet[40];
+  private static Pet[] pets = new Pet[40];
 
   private static int petCount = 0;
 
@@ -33,7 +33,7 @@ public class Main {
           String petBreed = parts[3].trim();
           int petAge = Integer.parseInt(parts[4].trim());
           String petOwnerID = parts[5].trim();
-          pets[petCount++]= new Pet(petID, petName, petSpecies, petBreed, petAge, petOwnerID);
+          pets[petCount++] = new Pet(petID, petName, petSpecies, petBreed, petAge, petOwnerID);
           
         } catch (NumberFormatException e) {
           // 

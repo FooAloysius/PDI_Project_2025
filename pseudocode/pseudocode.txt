@@ -1,31 +1,41 @@
 AUthor: Foo, JunXiang, Angel
 Created: 24/05/2025
-Modified: 24/05/2025
+Modified: 25/05/2025
 CLASS Main:
   Class Feild:
     DECLARE CSVPath as String = 'csv/'
     DECLARE PetsFileName as String = 'Pets.csv'
     DECLARE CustomersFileName as String = 'Customers.csv'
     DECLARE TreatmentFileName as String = 'Treatments.csv'
+    DECLARE petCount as INTEGER = 0
 
   PROCEDURE: ImportPets
   IMPORT: fileName
   EXPORT: none
   ALGORITHM: 
     DECLARE PetFilePath as String = CSVPath + PetsFileName
-    DECLARE lineCount as INTEGER = 0
-    DECLARE line as String
+    petCount = 0
 
     OPEN PetFilePath FOR READING WHILE EOF(PetsFilePath)
+    DECLARE line as String
     WHILE NOT EOF(PetsFilePath)
       READ line
-      lineCount ++
-      petID = line[0]
-      petName = line[1]
-      petSpecies =line[2]
-      petBreed = line[3]
-      petAge = line[4]
-      petOwnerID = line[5]
+
+      IF (TRIM of line ISEMPTY) OR (line CONTAINS " ," OR ", " ) OR (line NOT CONTAINS "," ):
+        CONTINUE
+
+      DECLARE parts AS STRING OF ARRAY = SPLIT line AS ","
+
+      IF LENGTH OF parts NOT EQUAL TO 6:
+        continue
+
+      DECLARE petID AS STRING = TRIM OF parts[0]
+      DECLARE petName AS STRING = TRIM OF parts[1]
+      DECLARE petSpecies AS STRING = TRIM OF parts[2]
+      DECLARE petBreed AS STRING = TRIM OF parts[3]
+      DECLARE petAge AS INTEGER = TRIM OF parts[4]
+      DECLARE petOwnerID AS STRING = TRIM OF parts[5]
+      DECLARE petCount ++
       NEW Pet(petID, petName, petSpecies, petBreed, petAge, petOwnerID)
     END WHILE
     CLOSE PetsFilePath

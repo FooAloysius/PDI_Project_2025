@@ -1,4 +1,5 @@
 :: USE FOR GIT AUTO COMMIT AND AUTO PUSH TO GITHUB REPOSITORY
+:: Use this command in terminal to execute this whole batch command "./auto_git"
 
 @echo off
 :: get current time and date：2025-05-23 14:35:12
