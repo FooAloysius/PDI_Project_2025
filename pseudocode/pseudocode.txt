@@ -59,9 +59,9 @@ CLASS Main:
 Author: Foo
 Purpose: All the method for accessing/mutating pet owner info
 Created: 15/05/2025
-Modified: 23/05/2025
+Modified: 3/06/2025
 CLASS PetOwner:
-    petOwnerID (int)
+    petOwnerID (String)
     petOwnerName (String)
     petOwnerContact (int)
 
@@ -113,13 +113,13 @@ CLASS PetOwner:
     EXPORT: none
     ASSERTION: Initialize default pet owner details
     ALGORITHM:
-        SET petOwnerID <- 1292848
-        SET petOwnerName <- "Abang"
-        SET petOwnerContact <- 0123456789
+        SET petOwnerID <- "Customer_123456"
+        SET petOwnerName <- "Foo"
+        SET petOwnerContact <- 0121111111
 
     PARAMETER CONSTRUCTOR
     CONSTRUCTOR: PetOwner
-    IMPORT: pPetOwnerID (int), pPetOwnerName (String), pPetOwnerContact (int)
+    IMPORT: pPetOwnerID (String), pPetOwnerName (String), pPetOwnerContact (int)
     EXPORT: none
     ASSERTION: Constructor with parameter
     ALGORITHM:

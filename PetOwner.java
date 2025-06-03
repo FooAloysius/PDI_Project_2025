@@ -1,15 +1,15 @@
 public class PetOwner {
-  private int petOwnerID;
+  private String petOwnerID;
   private String petOwnerName;
   private int petOwnerContact;
-  private static Pet [] petsBelongTo = new Pet[countOfPets];
+  // private static Pet [] petsBelongTo = new Pet[countOfPets];
 
   /*
   * ACCESSOR: getPetOwnerID
   * IMPORT: none
   * EXPORT: petOwnerID (int)
   */
-  public int getPetOwnerID () {
+  public String getPetOwnerID () {
     return this.petOwnerID;
   }
 
@@ -36,7 +36,7 @@ public class PetOwner {
   * IMPORT: pPetOwnerID (int)
   * EXPORT: none
   */
-  public void setPetOwnerID (int pPetOwnerID) {
+  public void setPetOwnerID (String pPetOwnerID) {
     this.petOwnerID = pPetOwnerID;
   }
 
@@ -66,10 +66,9 @@ public class PetOwner {
   * ASSERTION: Initialize default pet owner details
   */
   public PetOwner () {
-    petOwnerID = 1234567;
-    petOwnerName = "Abang";
+    petOwnerID = "Customer_123456";
+    petOwnerName = "Foo";
     petOwnerContact = 0121111111;
-    petsBelongTo = {};
   }
 
   /*
@@ -79,7 +78,7 @@ public class PetOwner {
   * EXPORT: none
   * ASSERTION: Constructor with parameter
   */
-  public PetOwner (int pPetOwnerID, String pPetOwnerName, int pPetOwnerContact) {
+  public PetOwner (String pPetOwnerID, String pPetOwnerName, int pPetOwnerContact) {
     petOwnerID = pPetOwnerID;
     petOwnerName = pPetOwnerName;
     petOwnerContact = pPetOwnerContact;

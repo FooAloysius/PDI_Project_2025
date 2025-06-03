@@ -1,18 +1,17 @@
 import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Main {
-  private static String CSVPath = "csv/";
-  private static String PetsFileName = "Pets.csv";
-  private static String CustomersFileName = "Customers.csv";
-  private static String TreatmentFileName = "Treatments.csv";
-  private static Pet[] pets = new Pet[40];
-
-  private static int petCount = 0;
+  public static String CSVPath = "csv/";
+  public static String PetsFileName = "Pets.csv";
+  public static String CustomersFileName = "Customers.csv";
+  public static String TreatmentFileName = "Treatments.csv";
+  static List<Pet> pets = new ArrayList<>();
+  static List<PetOwner> customers = new ArrayList<>();
 
   public static void importPets() {
     String PetFilePath = CSVPath + PetsFileName;
-
-    petCount = 0;
 
     try(BufferedReader br = new BufferedReader(new FileReader(PetFilePath))) {
       String line;
@@ -33,7 +32,8 @@ public class Main {
           String petBreed = parts[3].trim();
           int petAge = Integer.parseInt(parts[4].trim());
           String petOwnerID = parts[5].trim();
-          pets[petCount++] = new Pet(petID, petName, petSpecies, petBreed, petAge, petOwnerID);
+          // how to resize array
+          pets.add(new Pet(petID, petName, petSpecies, petBreed, petAge, petOwnerID));
           
         } catch (NumberFormatException e) {
           // 
@@ -45,8 +45,41 @@ public class Main {
     }
   }
 
+  public static void importCustomers() {
+    String CustomerFilePath = CSVPath + CustomersFileName;
+
+    try(BufferedReader br = new BufferedReader(new FileReader(CustomerFilePath))) {
+      String line;
+      while((line = br.readLine()) != null) {
+        if(line.trim().isEmpty() || line.contains(" ,") || line.contains(", ") || !line.contains(",")) {
+          continue; // invalid line
+        }
+
+        String[] parts = line.split(",");
+        if(parts.length != 3) {
+          continue; //invalid
+        }
+
+        try {
+          String petOwnerID = parts[0].trim();
+          String petOwnerName = parts[1].trim();
+          int petOwnerContact = Integer.parseInt(parts[2].trim());
+          
+          customers.add(new PetOwner(petOwnerID, petOwnerName, petOwnerContact));
+          
+        } catch (NumberFormatException e) {
+          // 
+          System.out.println(e);
+        }
+      }
+    }catch(IOException e){
+        System.out.println("File error:"+ e.getMessage());
+    }
+  }
   public static void main(String[] args) {
     importPets();
-    System.out.println(pets[3].getPetSpecies());
+    importCustomers();
+    System.out.println(pets.get(3).getPetSpecies()); // display pet name
+    System.out.println(customers.get(2).getPetOwnerName()); // display Customer name
   }
 }
