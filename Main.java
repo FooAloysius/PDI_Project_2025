@@ -76,9 +76,12 @@ public class Main {
         System.out.println("File error:"+ e.getMessage());
     }
   }
+  
   public static void main(String[] args) {
+    MainGui mainFrame = new MainGui();
     importPets();
     importCustomers();
+    new MainGui().mainGui();
     System.out.println(pets.get(3).getPetSpecies()); // display pet name
     System.out.println(customers.get(2).getPetOwnerName()); // display Customer name
   }
