@@ -1,6 +1,6 @@
  import java.util.List;
 
-public class Transaction {
+public class  Transaction {
     // Fields
     private String transactionID;
     private List<Treatment> treatmentList;

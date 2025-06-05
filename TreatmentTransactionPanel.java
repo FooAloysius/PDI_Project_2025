@@ -1,12 +1,15 @@
-import javax.swing.*;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
-import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.*;
-import java.util.List;
 import java.util.ArrayList;
+import java.util.List;
+import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
 
+/*
+* AUTHOR: Jun Xiang
+* CREATED: 25/05/2025
+* MODIFIED: 05/06/2025
+*/
 public class TreatmentTransactionPanel extends JPanel {
     private JTable table;
     private JTextField consultationField;
