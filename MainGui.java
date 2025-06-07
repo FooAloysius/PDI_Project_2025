@@ -12,7 +12,7 @@ import javax.swing.border.EmptyBorder;
 /*
 * AUTHOR: Foo, Angel, Jun Xiang
 * CREATED: 03/06/2025
-* MODIFIED: 05/06/2025
+* MODIFIED: 07/06/2025
 */
 public class MainGui extends JFrame implements ActionListener {
   JPanel sideBarPanel;
@@ -54,6 +54,7 @@ public class MainGui extends JFrame implements ActionListener {
     addUserPageButton.setVerticalTextPosition(JButton.BOTTOM);
     addUserPageButton.setHorizontalTextPosition(JButton.CENTER);
     addUserPageButton.setIconTextGap(5);
+    addUserPageButton.addActionListener(this);
 
     // Add page icon
     ImageIcon treatmentIcon = new ImageIcon("./icons/add_icon_30px.png");
@@ -65,6 +66,7 @@ public class MainGui extends JFrame implements ActionListener {
     treatmentPageButton.setVerticalTextPosition(JButton.BOTTOM);
     treatmentPageButton.setHorizontalTextPosition(JButton.CENTER);
     treatmentPageButton.setIconTextGap(5);
+    treatmentPageButton.addActionListener(this);
     
     // add all button on to side bar
     sideBarPanel.add(homePageButton);
@@ -90,8 +92,8 @@ public class MainGui extends JFrame implements ActionListener {
   public void actionPerformed(ActionEvent e) {
     if (e.getSource() == homePageButton) {
       new HomePage().gui(contentPanel);
-    } else if (e.getSource() == addUserPageButton) {
-      new HomePage().gui(contentPanel);
+    } else if (e.getSource() == addUserPageButton) {          
+      new AddUserPage().gui(contentPanel);
     } else if (e.getSource() == treatmentPageButton) {
       new HomePage().gui(contentPanel);
     }
