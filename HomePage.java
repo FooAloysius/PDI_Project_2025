@@ -1,7 +1,7 @@
 /* REFERENCE
  * https://docs.oracle.com/javase/tutorial/uiswing/misc/timer.html
  * https://www.baeldung.com/java-datetimeformatter
- * 
+ * https://docs.oracle.com/cd/E84527_01/wcs/tag-ref/MISC/TimeZones.html
  * 
  */
 
@@ -48,7 +48,7 @@ public class HomePage {
     // Image Icon for pet view
     ImageIcon petViewIcon = new ImageIcon(((new ImageIcon("./images/pet_image_1280px.png")).getImage()).getScaledInstance(300, 300, java.awt.Image.SCALE_SMOOTH));
     // button to pet panel
-    JButton petViewButton = new JButton("View Pet", petViewIcon);
+    JButton petViewButton = new JButton("View Pets", petViewIcon);
     petViewButton.setContentAreaFilled(false); // transparent background
     petViewButton.setBorderPainted(false); // set border to none
     petViewButton.setCursor(new Cursor(Cursor.HAND_CURSOR)); // when mouse hover, set cursor to pointer
@@ -59,7 +59,7 @@ public class HomePage {
     // Image Icon for pet view
     ImageIcon customerViewIcon = new ImageIcon(((new ImageIcon("./images/customer_image_900px.png")).getImage()).getScaledInstance(220, 300, java.awt.Image.SCALE_SMOOTH));
     // button to pet panel
-    JButton customerViewButton = new JButton("View Pet", customerViewIcon);
+    JButton customerViewButton = new JButton("View Customers", customerViewIcon);
     customerViewButton.setContentAreaFilled(false); // transparent background
     customerViewButton.setBorderPainted(false); // set border to none
     customerViewButton.setCursor(new Cursor(Cursor.HAND_CURSOR)); // when mouse hover, set cursor to pointer
