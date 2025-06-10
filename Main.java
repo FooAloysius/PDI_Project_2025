@@ -1,88 +1,112 @@
-import java.io.*;
-import java.util.ArrayList;
-import java.util.List;
+/* REFERENCE
+ * https://coderanch.com/t/331731/java/Resize-ImageIcon
+ * 
+ * 
+ * 
+ */
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import javax.swing.*;
 
-public class Main {
-  public static String CSVPath = "csv/";
-  public static String PetsFileName = "Pets.csv";
-  public static String CustomersFileName = "Customers.csv";
-  public static String TreatmentFileName = "Treatments.csv";
-  static List<Pet> pets = new ArrayList<>();
-  static List<PetOwner> customers = new ArrayList<>();
+/*
+* AUTHOR: Foo, Angel, Jun Xiang
+* CREATED: 03/06/2025
+* MODIFIED: 11/06/2025
+*/
+public class Main extends JFrame implements ActionListener {
+  JPanel sideBarPanel;
+  static JPanel contentPanel;
+  JButton homePageButton;
+  JButton userPageButton;
+  JButton treatmentPageButton;
 
-  public static void importPets() {
-    String PetFilePath = CSVPath + PetsFileName;
+  // GUI start from here
+  public void mainGui () {
+    this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    this.setLayout(null);
+    this.setSize(1200,700);
+    this.setTitle("Animal Clinic Management System");
 
-    try(BufferedReader br = new BufferedReader(new FileReader(PetFilePath))) {
-      String line;
-      while((line = br.readLine()) != null) {
-        if(line.trim().isEmpty() || line.contains(" ,") || line.contains(", ") || !line.contains(",")) {
-          continue; // invalid line
-        }
+    // Side Bar panel
+    sideBarPanel = new JPanel();
+    sideBarPanel.setBackground(new Color(255, 254, 236));
+    sideBarPanel.setPreferredSize(new Dimension(90,0));
+    sideBarPanel.setLayout(new GridLayout(4,1, 5, 50));
+    
+    // Home page icon
+    ImageIcon homeIcon = new ImageIcon(((new ImageIcon("./icons/home_icon_200px.png")).getImage()).getScaledInstance(30, 30, java.awt.Image.SCALE_SMOOTH));
+    homePageButton = new JButton("Home", homeIcon);
+    homePageButton.setContentAreaFilled(false); // transparent background
+    homePageButton.setBorderPainted(false); // set border to none
+    homePageButton.setCursor(new Cursor(Cursor.HAND_CURSOR)); // when mouse hover, set cursor to pointer
+    homePageButton.setFocusable(false);
+    homePageButton.setVerticalTextPosition(JButton.BOTTOM);
+    homePageButton.setHorizontalTextPosition(JButton.CENTER);
+    homePageButton.setIconTextGap(5);
+    homePageButton.addActionListener(this);
+    
+    // User page icon
+    ImageIcon userIcon = new ImageIcon(((new ImageIcon("./icons/user_icon_229px.png")).getImage()).getScaledInstance(30, 30, java.awt.Image.SCALE_SMOOTH));
+    userPageButton = new JButton("Create Cutomer", userIcon);
+    userPageButton.setContentAreaFilled(false); // transparent background
+    userPageButton.setBorderPainted(false); // set border to none
+    userPageButton.setCursor(new Cursor(Cursor.HAND_CURSOR)); // when mouse hover, set cursor to pointer
+    userPageButton.setFocusable(false);
+    userPageButton.setVerticalTextPosition(JButton.BOTTOM);
+    userPageButton.setHorizontalTextPosition(JButton.CENTER);
+    userPageButton.setIconTextGap(5);
+    userPageButton.addActionListener(this);
+    userPageButton.setBounds(0, 0, 30, 30);
 
-        String[] parts = line.split(",");
-        if(parts.length != 6) {
-          continue; //invalid
-        }
+    // Add page icon
+    ImageIcon treatmentIcon = new ImageIcon(((new ImageIcon("./icons/add_icon_229px.png")).getImage()).getScaledInstance(30, 30, java.awt.Image.SCALE_SMOOTH));
+    treatmentPageButton = new JButton("Treatment", treatmentIcon);
+    treatmentPageButton.setContentAreaFilled(false); // transparent background
+    treatmentPageButton.setBorderPainted(false); // set border to none
+    treatmentPageButton.setCursor(new Cursor(Cursor.HAND_CURSOR)); // when mouse hover, set cursor to pointer
+    treatmentPageButton.setFocusable(false);
+    treatmentPageButton.setVerticalTextPosition(JButton.BOTTOM);
+    treatmentPageButton.setHorizontalTextPosition(JButton.CENTER);
+    treatmentPageButton.setIconTextGap(5);
+    treatmentPageButton.addActionListener(this);
+    
+    // add all button on to side bar
+    sideBarPanel.add(homePageButton);
+    sideBarPanel.add(userPageButton);
+    sideBarPanel.add(treatmentPageButton);
+    
+    this.setLayout(new BorderLayout()); // set JFrame to border layout
+    this.add(sideBarPanel, BorderLayout.WEST); // added sidebar to JFrame
 
-        try {
-          String petID = parts[0].trim();
-          String petName = parts[1].trim();
-          String petSpecies = parts[2].trim();
-          String petBreed = parts[3].trim();
-          int petAge = Integer.parseInt(parts[4].trim());
-          String petOwnerID = parts[5].trim();
-          // how to resize array
-          pets.add(new Pet(petID, petName, petSpecies, petBreed, petAge, petOwnerID));
-          
-        } catch (NumberFormatException e) {
-          // 
-          System.out.println(e);
-        }
-      }
-    }catch(IOException e){
-        System.out.println("File error:"+ e.getMessage());
-    }
-  }
+    // content panel goes here
+    contentPanel = new JPanel();
+    contentPanel.setLayout(new CardLayout());
+    contentPanel.setBackground(Color.WHITE);
+    new HomePage().gui(contentPanel); // set default page as HomePage
 
-  public static void importCustomers() {
-    String CustomerFilePath = CSVPath + CustomersFileName;
+    this.add(contentPanel);
 
-    try(BufferedReader br = new BufferedReader(new FileReader(CustomerFilePath))) {
-      String line;
-      while((line = br.readLine()) != null) {
-        if(line.trim().isEmpty() || line.contains(" ,") || line.contains(", ") || !line.contains(",")) {
-          continue; // invalid line
-        }
-
-        String[] parts = line.split(",");
-        if(parts.length != 3) {
-          continue; //invalid
-        }
-
-        try {
-          String petOwnerID = parts[0].trim();
-          String petOwnerName = parts[1].trim();
-          int petOwnerContact = Integer.parseInt(parts[2].trim());
-          
-          customers.add(new PetOwner(petOwnerID, petOwnerName, petOwnerContact));
-          
-        } catch (NumberFormatException e) {
-          // 
-          System.out.println(e);
-        }
-      }
-    }catch(IOException e){
-        System.out.println("File error:"+ e.getMessage());
-    }
+    this.setVisible(true);
+    
   }
   
+  /* main method for the whole program */
   public static void main(String[] args) {
-    MainGui mainFrame = new MainGui();
-    importPets();
-    importCustomers();
-    new MainGui().mainGui();
-    System.out.println(pets.get(3).getPetSpecies()); // display pet name
-    System.out.println(customers.get(2).getPetOwnerName()); // display Customer name
+    new Main().mainGui(); // starting GUI
+    new Data().init(); // initialize all data
+  }
+  
+  @Override
+  public void actionPerformed(ActionEvent e) {
+
+    // left side bar panel button ActionEvent listener here
+    if (e.getSource() == homePageButton) {
+      new HomePage().gui(contentPanel);
+    } else if (e.getSource() == userPageButton) {          
+      new AddUserPage().gui(contentPanel);
+    } else if (e.getSource() == treatmentPageButton) {
+      new TreatmentTransactionPanel().gui(contentPanel);
+    }
   }
 }

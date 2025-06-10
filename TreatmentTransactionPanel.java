@@ -1,6 +1,4 @@
 import java.awt.*;
-import java.awt.event.*;
-import java.util.ArrayList;
 import java.util.List;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -8,23 +6,22 @@ import javax.swing.table.DefaultTableModel;
 /*
 * AUTHOR: Jun Xiang
 * CREATED: 25/05/2025
-* MODIFIED: 05/06/2025
+* MODIFIED: 06/06/2025 (Simplified)
 */
 public class TreatmentTransactionPanel extends JPanel {
     private JTable table;
     private JTextField consultationField;
-    private JLabel subtotalLabel, taxLabel, totalLabel;
+    private JLabel totalLabel;
 
     private List<Treatment> treatmentList;
-    private List<Treatment> selectedTreatments = new ArrayList<>();
 
     public TreatmentTransactionPanel() {
         setLayout(new BorderLayout());
 
         // Load treatments from CSV
-        treatmentList = Treatment.loadFromCSV("treatments.csv");
+        treatmentList = Treatment.loadFromCSV("./csv/Treatments.csv");
 
-        // Table data
+        // Table setup
         String[] columnNames = {"ID", "Name", "Fee (RM)"};
         DefaultTableModel tableModel = new DefaultTableModel(columnNames, 0);
         for (Treatment t : treatmentList) {
@@ -32,70 +29,61 @@ public class TreatmentTransactionPanel extends JPanel {
         }
 
         table = new JTable(tableModel);
-        table.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
+        table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION); 
         JScrollPane scrollPane = new JScrollPane(table);
         add(scrollPane, BorderLayout.CENTER);
 
-        // Consultation fee + output panel
-        JPanel bottomPanel = new JPanel(new GridLayout(5, 2, 5, 5));
-        bottomPanel.setBorder(BorderFactory.createTitledBorder("Transaction Details"));
+        // Bottom panel
+        JPanel bottomPanel = new JPanel(new GridLayout(3, 2, 5, 5));
+        bottomPanel.setBorder(BorderFactory.createTitledBorder("Consultation & Total"));
 
         bottomPanel.add(new JLabel("Consultation Fee (RM):"));
         consultationField = new JTextField("0.00");
         bottomPanel.add(consultationField);
 
-        subtotalLabel = new JLabel("Subtotal: RM 0.00");
-        taxLabel = new JLabel("Tax (6%): RM 0.00");
-        totalLabel = new JLabel("Total: RM 0.00");
+        JButton calcButton = new JButton("Calculate Total");
+        bottomPanel.add(calcButton);
 
-        bottomPanel.add(subtotalLabel);
-        bottomPanel.add(taxLabel);
-        bottomPanel.add(new JLabel()); 
+        totalLabel = new JLabel("Final Total: RM 0.00");
         bottomPanel.add(totalLabel);
 
         add(bottomPanel, BorderLayout.SOUTH);
 
-        // Update total when table selection changes or consultation fee changes
-        table.getSelectionModel().addListSelectionListener(e -> updateTotal());
-        consultationField.addKeyListener(new KeyAdapter() {
-            public void keyReleased(KeyEvent e) {
-                updateTotal();
-            }
-        });
+        // Button listener
+        calcButton.addActionListener(e -> calculateTotal());
     }
 
-    private void updateTotal() {
+    private void calculateTotal() {
         try {
-            selectedTreatments.clear();
-            int[] selectedRows = table.getSelectedRows();
-            for (int row : selectedRows) {
-                selectedTreatments.add(treatmentList.get(row));
+            int selectedRow = table.getSelectedRow();
+            if (selectedRow == -1) {
+                JOptionPane.showMessageDialog(this, "Please select one treatment.");
+                return;
             }
 
+            double treatmentFee = treatmentList.get(selectedRow).getTreatmentFee();
             double consultationFee = Double.parseDouble(consultationField.getText());
 
-            Transaction tx = new Transaction("TX001", selectedTreatments, consultationFee);
-            tx.calculateTotalAmount();
-            tx.calculateFinalAmount();
+            double finalTotal = treatmentFee + (treatmentFee * 0.06) + consultationFee;
 
-            subtotalLabel.setText(String.format("Subtotal: RM %.2f", tx.getTotalAmount()));
-            taxLabel.setText(String.format("Tax (6%%): RM %.2f", tx.getTaxAmount()));
-            totalLabel.setText(String.format("Total: RM %.2f", tx.getFinalAmount()));
-
+            totalLabel.setText(String.format("Final Total: RM %.2f", finalTotal));
         } catch (NumberFormatException ex) {
-            subtotalLabel.setText("Subtotal: RM 0.00");
-            taxLabel.setText("Tax (6%): RM 0.00");
-            totalLabel.setText("Total: RM 0.00");
+            JOptionPane.showMessageDialog(this, "Invalid consultation fee.");
         }
     }
 
-    // Main method for standalone testing
-    public static void main(String[] args) {
-        JFrame frame = new JFrame("Treatment Transaction Panel");
+    // Optional main method for testing
+    public void gui(JPanel panel) {
+        JFrame frame = new JFrame("Simplified Treatment Transaction Panel");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(500, 500);
         frame.add(new TreatmentTransactionPanel());
         frame.setVisible(true);
+        
+        String[] pets = new Data().getPetsNameList();
+
+        for (int i = 0; i < pets.length; i++) {
+            System.out.println(pets[i]);
+        }
     }
 }
-
