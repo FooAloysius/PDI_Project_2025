@@ -1,8 +1,6 @@
 /* REFERENCE
  * https://coderanch.com/t/331731/java/Resize-ImageIcon
  * 
- * 
- * 
  */
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -20,6 +18,7 @@ public class Main extends JFrame implements ActionListener {
   JButton homePageButton;
   JButton userPageButton;
   JButton treatmentPageButton;
+  static Data data;
 
   // GUI start from here
   public void mainGui () {
@@ -31,7 +30,7 @@ public class Main extends JFrame implements ActionListener {
     // Side Bar panel
     sideBarPanel = new JPanel();
     sideBarPanel.setBackground(new Color(255, 254, 236));
-    sideBarPanel.setPreferredSize(new Dimension(90,0));
+    sideBarPanel.setPreferredSize(new Dimension(150,0));
     sideBarPanel.setLayout(new GridLayout(4,1, 5, 50));
     
     // Home page icon
@@ -81,9 +80,9 @@ public class Main extends JFrame implements ActionListener {
 
     // content panel goes here
     contentPanel = new JPanel();
-    contentPanel.setLayout(new CardLayout());
+    contentPanel.setLayout(new BoxLayout(contentPanel, BoxLayout.PAGE_AXIS));
     contentPanel.setBackground(Color.WHITE);
-    new HomePage().gui(contentPanel); // set default page as HomePage
+    new HomePage().gui(contentPanel, data); // set default page as HomePage
 
     this.add(contentPanel);
 
@@ -93,8 +92,9 @@ public class Main extends JFrame implements ActionListener {
   
   /* main method for the whole program */
   public static void main(String[] args) {
+    data = new Data();
+    data.init(); // initialize all data
     new Main().mainGui(); // starting GUI
-    new Data().init(); // initialize all data
   }
   
   @Override
@@ -102,11 +102,11 @@ public class Main extends JFrame implements ActionListener {
 
     // left side bar panel button ActionEvent listener here
     if (e.getSource() == homePageButton) {
-      new HomePage().gui(contentPanel);
+      new HomePage().gui(contentPanel, data);
     } else if (e.getSource() == userPageButton) {          
-      new CustomerPage().gui(contentPanel);
+      new CustomerPage().gui(contentPanel, data);
     } else if (e.getSource() == treatmentPageButton) {
-      new TreatmentTransactionPanel().gui(contentPanel);
+      new TreatmentTransactionPanel(data).gui(contentPanel);
     }
   }
 }

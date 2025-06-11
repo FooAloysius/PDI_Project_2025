@@ -17,8 +17,8 @@ import javax.swing.JTextField;
 public class CustomerPage {
   JPanel mainPanel;
   JPanel modal;
-  public JPanel customerList () {
-    List<PetOwner> customers= new Data().getCustomers();
+  public JPanel customerList (Data data) {
+    List<PetOwner> customers= data.getCustomers();
 
     JPanel listPanel = new JPanel();
     listPanel.setLayout(new BoxLayout(listPanel, BoxLayout.Y_AXIS)); // layout for list
@@ -51,7 +51,11 @@ public class CustomerPage {
       trashBinButton.setHorizontalTextPosition(JButton.CENTER);
       trashBinButton.setRolloverIcon(trashBinIconHover);
       trashBinButton.addActionListener((actionEvent) -> {
-        System.out.println("Delete " + customer.getPetOwnerName());
+        data.removeCustomer(customer);
+        mainPanel.removeAll();
+        mainPanel.add(customerList(data));
+        mainPanel.revalidate();
+        mainPanel.repaint();
       });
 
       // Image Icon for modifier
@@ -68,7 +72,6 @@ public class CustomerPage {
       modifierButton.setRolloverIcon(modifierIconHover);
       modifierButton.addActionListener((actionEvent) -> {
         modal = customerModify(customer);
-        System.out.println("modify for");
         mainPanel.removeAll();
         mainPanel.add(modal);
         mainPanel.revalidate();
@@ -82,13 +85,15 @@ public class CustomerPage {
       listPanel.add(listElement);
       
     }
-
+    
     return listPanel;
   }
-
+  
   public JPanel customerModify (PetOwner customer) {
     JPanel customerModifyModal = new JPanel();
-
+    customerModifyModal.setLayout(new BoxLayout(customerModifyModal, BoxLayout.Y_AXIS));
+    customerModifyModal.setPreferredSize(new Dimension(400,300));
+    
     // customer id
     JPanel idGroup = new JPanel();
     JLabel idLabel = new JLabel("Customer ID: ");
@@ -104,7 +109,7 @@ public class CustomerPage {
     nameInput.setPreferredSize(new Dimension(250,40));
     nameGroup.add(nameLabel);
     nameGroup.add(nameInput);
-
+    
     // customer contact
     JPanel contactGroup = new JPanel();
     JLabel contactLabel = new JLabel("Customer contact: ");
@@ -112,18 +117,22 @@ public class CustomerPage {
     contactInput.setPreferredSize(new Dimension(250,40));
     contactGroup.add(contactLabel);
     contactGroup.add(contactInput);
-
+    
     customerModifyModal.add(idGroup);
+    customerModifyModal.add(Box.createVerticalStrut(20));
     customerModifyModal.add(nameGroup);
+    // customerModifyModal.add(Box.createRigidArea(new Dimension(0,30)));
     customerModifyModal.add(contactGroup);
+
     return customerModifyModal;
   }
 
-  public void gui (JPanel panel) {
+  public void gui (JPanel panel, Data data) {
     mainPanel = panel;
     panel.removeAll();
+    panel.setLayout(new BoxLayout(panel, BoxLayout.PAGE_AXIS));
 
-    JPanel customerList = customerList();
+    JPanel customerList = customerList(data);
 
     panel.add(customerList);
     panel.revalidate();

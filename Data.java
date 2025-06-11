@@ -83,6 +83,10 @@ public class Data {
     return customers;
   }
 
+  public void removeCustomer (PetOwner customer) {
+    customers.remove(customer);
+  }
+
   public int getPetSize () {
     return pets.size();
   }

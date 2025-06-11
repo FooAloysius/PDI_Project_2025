@@ -9,16 +9,21 @@ import javax.swing.table.DefaultTableModel;
 * MODIFIED: 10/06/2025 (Added Pet ComboBox + Consultation Fee Validation)
 */
 public class TreatmentTransactionPanel extends JPanel {
+    private Data data;
     private JTable table;
     private JTextField consultationField;
     private JLabel totalLabel;
 
     private List<Treatment> treatmentList;
-
-    public TreatmentTransactionPanel() {
+    
+    public TreatmentTransactionPanel(Data data) {
+        this.data = data;
+        initUI();
+    }
+    
+    public void initUI() {
         setLayout(new BorderLayout());
 
-        Data data = new Data();
         String[] petNames = data.getPetsNameList();
 
         JComboBox<String> petComboBox = new JComboBox<>(petNames);
@@ -87,9 +92,9 @@ public class TreatmentTransactionPanel extends JPanel {
         }
     }
 
-    public static void gui(JPanel panel) {
+    public void gui(JPanel panel) {
         panel.removeAll();
-        panel.add(new TreatmentTransactionPanel());
+        panel.add(this);
         panel.revalidate();
         panel.repaint();
     }

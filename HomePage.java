@@ -24,9 +24,10 @@ public class HomePage {
   private JTextField nameField;
   private JTextField emailField;
   private JTextField petsField;
+  CustomerPage customerPage = new CustomerPage();
 
   JLabel labelDateTime;
-  public void gui (JPanel panel) {
+  public void gui (JPanel panel, Data data) {
     panel.removeAll();
 
     JPanel homePanel = new JPanel();
@@ -58,7 +59,7 @@ public class HomePage {
     petViewButton.setHorizontalTextPosition(JButton.CENTER);
     petViewButton.setRolloverIcon(petViewIconHover);
     petViewButton.addActionListener((actionEvent) -> {
-      new CustomerPage().gui(panel);
+      customerPage.gui(panel, data);
     });
 
     // Image Icon for pet view
@@ -74,7 +75,7 @@ public class HomePage {
     customerViewButton.setHorizontalTextPosition(JButton.CENTER);
     customerViewButton.setRolloverIcon(customerViewIconHover);
     customerViewButton.addActionListener((actionEvent) -> {
-      new CustomerPage().gui(panel);
+      customerPage.gui(panel, data);
     });
 
     petNavPanel.add(petViewButton);
