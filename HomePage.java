@@ -7,12 +7,8 @@
 
 import java.awt.*;
 import java.awt.event.*;
-import java.time.LocalDate;
-import java.time.LocalTime;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.time.format.FormatStyle;
 import javax.swing.*;
 
 /*
@@ -98,13 +94,13 @@ public class HomePage {
     Timer timer = new Timer(1000,  new ActionListener() {
         @Override
         public void actionPerformed(ActionEvent e) {
-            LocalDate day = LocalDate.now();
-            LocalTime time = LocalTime.now();
-            ZonedDateTime zonedDateTime = ZonedDateTime.of(day, time, ZoneId.of("Asia/Kuala_Lumpur"));
+            LocalDateTime now = LocalDateTime.now();
+            // LocalTime time = LocalTime.now();
+            // ZonedDateTime zonedDateTime = ZonedDateTime.of(day, time, ZoneId.of("Asia/Kuala_Lumpur"));
 
 
             labelDateTime.setText(
-              DateTimeFormatter.ofLocalizedDateTime(FormatStyle.FULL).format(zonedDateTime)
+              now.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"))
             );
           
         }
