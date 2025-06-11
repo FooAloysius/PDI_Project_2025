@@ -1,0 +1,11 @@
+Date            : 12/06/2025
+Payment Method  : Cash
+--------------------------------------------
+Selected Treatments:
+--------------------------------------------
+Grand Amount    : RM 760.78
+Amount Paid     : RM 1111.00
+Balance         : RM 350.22
+Status          : PAID
+--------------------------------------------
+   Thank you for visiting our clinic! 

@@ -1,6 +1,7 @@
 import java.awt.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -15,6 +16,8 @@ public class TreatmentTransactionPanel extends JPanel {
     private JTable table;
     private JTextField consultationField;
     private JLabel subtotalLabel, taxLabel, totalLabel, ownerLabel, dateTimeLabel;
+    private JPanel selectedtreatmentsPanel, selectedTreatmentsList;
+    private JLabel selectedTreatmentsLabel;
 
     private List<Treatment> treatmentList;
 
@@ -69,24 +72,42 @@ public class TreatmentTransactionPanel extends JPanel {
         add(scrollPane, BorderLayout.CENTER);
 
         // Bottom Panel: Subtotal / Tax / Total 
-        JPanel bottomPanel = new JPanel(new GridLayout(5, 2, 5, 5));
+        JPanel bottomPanel = new JPanel(new GridLayout(5, 3, 5, 5));
         bottomPanel.setBorder(BorderFactory.createTitledBorder("Transaction Summary"));
 
         bottomPanel.add(new JLabel("Consultation Fee (RM):"));
         consultationField = new JTextField("0.00");
         bottomPanel.add(consultationField);
 
+        // added treatments list choosen
+        List<String> selectedTreatments = getSelectedTreatmentNames();
+        selectedtreatmentsPanel = new JPanel();
+        selectedtreatmentsPanel.setPreferredSize(new Dimension(130,400));
+        selectedtreatmentsPanel.setLayout(new BoxLayout(selectedtreatmentsPanel, BoxLayout.Y_AXIS));
+        selectedTreatmentsLabel = new JLabel("Selected Treatments:");
+        selectedtreatmentsPanel.add(selectedTreatmentsLabel);
+
+        selectedTreatmentsList = new JPanel();
+        for (String treatment: selectedTreatments) {
+            selectedTreatmentsList.add(new JLabel(treatment));
+        }
+        selectedtreatmentsPanel.add(selectedTreatmentsLabel);
+        selectedtreatmentsPanel.add(selectedTreatmentsList);
+
+        
+        
         subtotalLabel = new JLabel("Subtotal: RM 0.00");
         bottomPanel.add(subtotalLabel);
         taxLabel = new JLabel("Tax (6%): RM 0.00");
         bottomPanel.add(taxLabel);
         totalLabel = new JLabel("Grand Total: RM 0.00");
         bottomPanel.add(totalLabel);
-
+        
         JButton calcButton = new JButton("Calculate Total");
         bottomPanel.add(calcButton);
 
         add(bottomPanel, BorderLayout.SOUTH);
+        add(selectedtreatmentsPanel, BorderLayout.EAST);
 
         //  Button Action: Calculate Total from multiple treatments 
         calcButton.addActionListener(e -> calculateTotal());
@@ -111,6 +132,14 @@ public class TreatmentTransactionPanel extends JPanel {
                 return;
             }
 
+            // added treatments list choosen
+            List<String> selectedTreatments = getSelectedTreatmentNames();
+            selectedtreatmentsPanel.add(new JLabel("Selected Treatments:"));
+            selectedTreatmentsList.removeAll();
+            for (String treatment: selectedTreatments) {
+                selectedTreatmentsList.add(new JLabel(treatment));
+            }
+
             //Subtotal Calculation 
             double subtotal = 0.0;
             for (int row : selectedRows) {
@@ -119,6 +148,9 @@ public class TreatmentTransactionPanel extends JPanel {
 
             double tax = subtotal * 0.06;
             double grandTotal = subtotal + tax + consultationFee;
+    
+            // UPDATE shared variable for use in PaymentPanel
+            Main.latestTotalFee = grandTotal;
 
             //Update Summary Labels 
             subtotalLabel.setText(String.format("Subtotal: RM %.2f", subtotal));
@@ -134,6 +166,17 @@ public class TreatmentTransactionPanel extends JPanel {
         panel.add(this);
         panel.revalidate();
         panel.repaint();
+    }
+
+    // utility for receipt part
+    public List<String> getSelectedTreatmentNames() {
+        int[] selectedRows = table.getSelectedRows();
+        List<String> selectedTreatmentsName = new ArrayList<>();
+
+        for (int row : selectedRows) {
+            selectedTreatmentsName.add(treatmentList.get(row).getTreatmentName());
+        }
+        return selectedTreatmentsName;
     }
 }
 

@@ -1,0 +1,17 @@
+Date            : 12/06/2025
+Payment Method  : Card
+--------------------------------------------
+Selected Treatments:
+ - Skin Allergy Test
+ - Ultrasound
+ - Stool Sample Test
+ - Urine Analysis
+ - Surgery Consultation
+ - Post-Surgery Care
+ - Antibiotic Injection
+--------------------------------------------
+Grand Amount    : RM 1144.50
+Amount Paid     : RM 1144.50
+Status          : PAID
+--------------------------------------------
+   Thank you for visiting our clinic! 

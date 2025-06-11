@@ -1,16 +1,19 @@
 /* REFERENCE
  * https://coderanch.com/t/331731/java/Resize-ImageIcon
- * 
+ * https://dev.to/pavel_polivka/double-comparison-in-java-1b7
  */
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import javax.swing.*;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.List;
+import javax.swing.*; 
 
 /*
 * AUTHOR: Foo, Angel, Jun Xiang
 * CREATED: 03/06/2025
-* MODIFIED: 11/06/2025
+* MODIFIED: 12/06/2025
 */
 public class Main extends JFrame implements ActionListener {
   JPanel sideBarPanel;
@@ -18,7 +21,11 @@ public class Main extends JFrame implements ActionListener {
   JButton homePageButton;
   JButton userPageButton;
   JButton treatmentPageButton;
+  JButton paymentPageButton;
   static Data data;
+  public static double latestTotalFee = 0.00 ;  
+  TreatmentTransactionPanel treatmentTransactionPanel;
+  public static List<String> selectedTreatmentNames;  // Declare selectedTreatmentNames
 
   // GUI start from here
   public void mainGui () {
@@ -69,11 +76,24 @@ public class Main extends JFrame implements ActionListener {
     treatmentPageButton.setHorizontalTextPosition(JButton.CENTER);
     treatmentPageButton.setIconTextGap(5);
     treatmentPageButton.addActionListener(this);
-    
+
+    // Payment page icon
+    ImageIcon paymentIcon = new ImageIcon(((new ImageIcon("./icons/payment_icon_1024px.png")).getImage()).getScaledInstance(50, 50, java.awt.Image.SCALE_SMOOTH));
+    paymentPageButton = new JButton("Payment", paymentIcon);
+    paymentPageButton.setContentAreaFilled(false);
+    paymentPageButton.setBorderPainted(false);
+    paymentPageButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
+    paymentPageButton.setFocusable(false);
+    paymentPageButton.setVerticalTextPosition(JButton.BOTTOM);
+    paymentPageButton.setHorizontalTextPosition(JButton.CENTER);
+    paymentPageButton.setIconTextGap(5);
+    paymentPageButton.addActionListener(this);
+  
     // add all button on to side bar
     sideBarPanel.add(homePageButton);
     sideBarPanel.add(userPageButton);
     sideBarPanel.add(treatmentPageButton);
+    sideBarPanel.add(paymentPageButton);
     
     this.setLayout(new BorderLayout()); // set JFrame to border layout
     this.add(sideBarPanel, BorderLayout.WEST); // added sidebar to JFrame
@@ -106,7 +126,124 @@ public class Main extends JFrame implements ActionListener {
     } else if (e.getSource() == userPageButton) {          
       new CustomerPage().gui(contentPanel, data);
     } else if (e.getSource() == treatmentPageButton) {
-      new TreatmentTransactionPanel(data).gui(contentPanel);
+      treatmentTransactionPanel = new TreatmentTransactionPanel(data);
+      treatmentTransactionPanel.gui(contentPanel);
+    } else if (e.getSource() == paymentPageButton) {
+      showPaymentDialog();
+    }
+  }
+
+  private void showPaymentDialog() {
+    String[] options = {"Cash", "Card"};
+    String selected = (String) JOptionPane.showInputDialog(
+      this,
+      "Choose your payment method:",
+      "Payment Method",
+      JOptionPane.PLAIN_MESSAGE,
+      null,
+      options,
+      options[0]
+    );
+
+    if (selected != null) {
+      JFrame paymentFrame = new JFrame("Payment Panel");
+      paymentFrame.setSize(400, 300);
+
+      JPanel panel = new JPanel(new GridLayout(5, 2, 5, 5));
+      DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+
+      JLabel dateLabel = new JLabel("Payment Date:");
+      JTextField dateField = new JTextField(LocalDate.now().format(formatter));
+      dateField.setEditable(false);
+
+      JLabel amountLabel = new JLabel("Grand Amount (RM):");
+      JTextField amountField = new JTextField(String.format("%.2f", latestTotalFee));
+      amountField.setEditable(false);
+
+      JLabel paidLabel = new JLabel(selected.equals("Cash") ? "Amount of Cash (RM):" : "Amount Paid (RM):");
+      JTextField paidField = new JTextField();
+
+      JLabel balanceLabel = new JLabel("Balance (RM):");
+      JTextField balanceField = new JTextField();
+      balanceField.setEditable(false);
+
+      JLabel statusLabel = new JLabel("Status:");
+      JTextField statusField = new JTextField();
+      statusField.setEditable(false);
+
+      JButton checkButton = new JButton("Check Payment");
+      checkButton.addActionListener(ae -> {
+        try {
+          double paid = Double.parseDouble(paidField.getText());
+          if (selected.equals("Cash")) {
+            if (paid >= latestTotalFee) {
+              balanceField.setText(String.format("%.2f", paid - latestTotalFee));
+              statusField.setText("Paid");
+            
+            // Add ReceiptPanel on successful CASH payment
+              ReceiptPanel receiptPanel = new ReceiptPanel(
+                  treatmentTransactionPanel.getSelectedTreatmentNames(),
+                  latestTotalFee,
+                  "Cash",
+                  paid
+              );
+              contentPanel.removeAll();
+              contentPanel.add(receiptPanel);
+              contentPanel.revalidate();
+              contentPanel.repaint();
+              paymentFrame.dispose();
+
+            } else {
+              balanceField.setText("0.00");
+              statusField.setText("Insufficient amount of cash!");
+            }
+          } else {
+            // bank payment
+            final double EPSILON = 0.01; // make absolute value, and compare if the result is smaller than 0.01
+            if (Math.abs(paid - latestTotalFee) < EPSILON) {
+              balanceField.setText("0.00");
+              statusField.setText("Paid");
+
+            // Add ReceiptPanel on successful CARD payment
+            ReceiptPanel receiptPanel = new ReceiptPanel(
+                  treatmentTransactionPanel.getSelectedTreatmentNames(),
+                  latestTotalFee,
+                  "Card",
+                  paid
+              );
+              contentPanel.removeAll();
+              contentPanel.add(receiptPanel);
+              contentPanel.revalidate();
+              contentPanel.repaint();
+              paymentFrame.dispose();
+
+            } else {
+              balanceField.setText("0.00");
+              statusField.setText("Amount paid must match the Grand Amount!");
+            }
+          }
+        } catch (NumberFormatException ex) {
+          statusField.setText("Invalid amount. Please enter a valid number.");
+        }
+      });
+
+      panel.add(dateLabel);
+      panel.add(dateField);
+      panel.add(amountLabel);
+      panel.add(amountField);
+      panel.add(paidLabel);
+      panel.add(paidField);
+      panel.add(balanceLabel);
+      panel.add(balanceField);
+      panel.add(statusLabel);
+      panel.add(statusField);
+
+      paymentFrame.add(panel, BorderLayout.CENTER);
+      paymentFrame.add(checkButton, BorderLayout.SOUTH);
+
+      paymentFrame.setVisible(true);
     }
   }
 }
+
+

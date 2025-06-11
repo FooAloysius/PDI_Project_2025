@@ -1,58 +1,102 @@
-import javax.swing.*;
 import java.awt.*;
-import java.awt.event.*;
+import java.time.LocalDate;
+import javax.swing.*;
 
 public class PaymentPanel extends JPanel {
-    private JTextField methodField;
     private JTextField amountField;
     private JTextField dateField;
-    private JTextArea summaryArea;
-    private JButton processButton;
+    private JTextField balanceField;
+    private JTextField statusField;
+    private double grandTotal;
 
-    public PaymentPanel() {
+    public PaymentPanel(double grandTotal) {
+        this.grandTotal = grandTotal;
+        initUI();
+    }
+
+    private void initUI() {
         setLayout(new BorderLayout());
 
-        // --- Top input panel ---
-        JPanel inputPanel = new JPanel(new GridLayout(4, 2, 5, 5));
+        // Title
+        JLabel titleLabel = new JLabel("Payment Method", SwingConstants.CENTER);
+        titleLabel.setFont(new Font("Arial", Font.BOLD, 18));
+        add(titleLabel, BorderLayout.NORTH);
 
-        inputPanel.add(new JLabel("Payment Method (Cash/Card):"));
-        methodField = new JTextField();
-        inputPanel.add(methodField);
+        // Form panel
+        JPanel formPanel = new JPanel(new GridLayout(6, 2, 5, 5));
 
-        inputPanel.add(new JLabel("Amount Paid (RM):"));
+        formPanel.add(new JLabel("Payment Date:"));
+        dateField = new JTextField(LocalDate.now().toString());
+        dateField.setEditable(false);
+        formPanel.add(dateField);
+
+        formPanel.add(new JLabel("Grand Amount (RM):"));
+        JTextField grandAmountField = new JTextField(String.format("%.2f", grandTotal));
+        grandAmountField.setEditable(false);
+        formPanel.add(grandAmountField);
+
+        formPanel.add(new JLabel("Amount of Cash / Paid (RM):"));
         amountField = new JTextField();
-        inputPanel.add(amountField);
+        formPanel.add(amountField);
 
-        inputPanel.add(new JLabel("Payment Date (YYYY-MM-DD):"));
-        dateField = new JTextField();
-        inputPanel.add(dateField);
+        formPanel.add(new JLabel("Balance (RM):"));
+        balanceField = new JTextField();
+        balanceField.setEditable(false);
+        formPanel.add(balanceField);
 
-        processButton = new JButton("Process Payment");
-        inputPanel.add(processButton);
+        formPanel.add(new JLabel("Status:"));
+        statusField = new JTextField();
+        statusField.setEditable(false);
+        formPanel.add(statusField);
 
-        add(inputPanel, BorderLayout.NORTH);
+        // Button panel
+        JPanel buttonPanel = new JPanel(new FlowLayout());
+        JButton cashBtn = new JButton("Pay with Cash");
+        JButton cardBtn = new JButton("Pay with Card");
+        buttonPanel.add(cashBtn);
+        buttonPanel.add(cardBtn);
 
-        // --- Summary area ---
-        summaryArea = new JTextArea(10, 30);
-        summaryArea.setEditable(false);
-        add(new JScrollPane(summaryArea), BorderLayout.CENTER);
+        // Add panels to layout
+        JPanel centerPanel = new JPanel(new BorderLayout());
+        centerPanel.add(formPanel, BorderLayout.CENTER);
+        centerPanel.add(buttonPanel, BorderLayout.SOUTH);
+        add(centerPanel, BorderLayout.CENTER);
 
-        // --- Button action ---
-        processButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                String method = methodField.getText().trim();
-                String amountText = amountField.getText().trim();
-                String date = dateField.getText().trim();
+        // Action listeners
+        cashBtn.addActionListener(e -> handleCashPayment());
+        cardBtn.addActionListener(e -> handleCardPayment());
+    }
 
-                try {
-                    double amount = Double.parseDouble(amountText);
-                    Payment payment = new Payment(method, amount, date);
-                    payment.processPayment(50.00); // simulate RM50 totalCost for now
-                    summaryArea.setText(payment.getPaymentSummary());
-                } catch (NumberFormatException ex) {
-                    summaryArea.setText("Invalid amount. Please enter a valid number.");
-                }
+    private void handleCashPayment() {
+        String input = amountField.getText().trim();
+        try {
+            double paid = Double.parseDouble(input);
+            if (paid >= grandTotal) {
+                double balance = paid - grandTotal;
+                balanceField.setText(String.format("%.2f", balance));
+                statusField.setText("Paid");
+            } else {
+                balanceField.setText("");
+                statusField.setText("Insufficient amount of cash!");
             }
-        });
+        } catch (NumberFormatException ex) {
+            statusField.setText("Invalid amount. Please enter a valid number.");
+        }
+    }
+
+    private void handleCardPayment() {
+        String input = amountField.getText().trim();
+        try {
+            double paid = Double.parseDouble(input);
+            if (Math.abs(paid - grandTotal) < 0.01) {
+                balanceField.setText("0.00");
+                statusField.setText("Paid");
+            } else {
+                balanceField.setText("");
+                statusField.setText("Amount must match the Grand Amount");
+            }
+        } catch (NumberFormatException ex) {
+            statusField.setText("Invalid amount. Please enter a valid number.");
+        }
     }
 }

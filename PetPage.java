@@ -11,6 +11,7 @@ public class PetPage {
   JPanel modal;
   JPanel petList;
   JPanel petCreate;
+  JButton createPetBtn;
   Color LIGHTBEACH = new Color(255, 254, 236);
   Color WHITE = new Color(255, 254, 242);
 
@@ -99,11 +100,6 @@ public class PetPage {
     JTextField breedField = makeEditableField("Breed:", pet.getPetBreed());
     JTextField ageField = makeEditableField("Age:", Integer.toString(pet.getPetAge()));
 
-    JPanel ownerFeildPanel = new JPanel();
-    ownerFeildPanel.setLayout(new BoxLayout(ownerFeildPanel, BoxLayout.Y_AXIS));
-    ownerFeildPanel.setPreferredSize(new Dimension(400, 300));
-    ownerFeildPanel.add(makeLabelField("Pet ID:", pet.getPetOwnerID()));
-
     nameField.addFocusListener(new FocusAdapter() {
       public void focusLost(FocusEvent e) {
         data.modifyPet(nameField.getText(), speciesField.getText(), breedField.getText(), Integer.parseInt(ageField.getText()), pet);
@@ -137,6 +133,7 @@ public class PetPage {
     petModifyPanel.add(speciesField.getParent());
     petModifyPanel.add(breedField.getParent());
     petModifyPanel.add(ageField.getParent());
+    petModifyPanel.add(makeLabelField("Pet Owner:", data.getCustomerName(pet.getPetOwnerID()))); // pet owner name
     petModifyPanel.add(backButton);
 
     return petModifyPanel;
@@ -155,11 +152,11 @@ public class PetPage {
     JTextField speciesField = makeEditableField("Species:", "");
     JTextField breedField = makeEditableField("Breed:", "");
     JTextField ageField = makeEditableField("Age:", "");
-    JTextField ownerField = makeEditableField("Owner ID:", "");
+    JComboBox ownerComboBox = makeComboBox("Customer Selector:", data.getCustomersNameList());
 
     JButton createButton = new JButton("Create");
     createButton.addActionListener(e -> {
-      data.createPet(petID, nameField.getText(), speciesField.getText(), breedField.getText(), Integer.parseInt(ageField.getText()), ownerField.getText());
+      data.createPet(petID, nameField.getText(), speciesField.getText(), breedField.getText(), Integer.parseInt(ageField.getText()), data.getCustomerID(ownerComboBox.getSelectedIndex()));
       gui(data);
     });
 
@@ -172,7 +169,7 @@ public class PetPage {
     petCreatePanel.add(speciesField.getParent());
     petCreatePanel.add(breedField.getParent());
     petCreatePanel.add(ageField.getParent());
-    petCreatePanel.add(ownerField.getParent());
+    petCreatePanel.add(ownerComboBox.getParent());
     petCreatePanel.add(backButton);
     petCreatePanel.add(createButton);
 
@@ -186,14 +183,7 @@ public class PetPage {
     panel.setLayout(new BoxLayout(panel, BoxLayout.PAGE_AXIS));
 
     petList = petList(data);
-    JButton createPetBtn = new JButton("Add New Pet");
-    createPetBtn.addActionListener(e -> {
-      mainPanel.removeAll();
-      petCreate = petCreate(data);
-      mainPanel.add(petCreate);
-      mainPanel.revalidate();
-      mainPanel.repaint();
-    });
+    createPetBtn = makeCreatePetBtn(data);
 
     panel.add(petList);
     panel.add(createPetBtn);
@@ -206,14 +196,7 @@ public class PetPage {
     mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.PAGE_AXIS));
 
     petList = petList(data);
-    JButton createPetBtn = new JButton("Add New Pet");
-    createPetBtn.addActionListener(e -> {
-      mainPanel.removeAll();
-      petCreate = petCreate(data);
-      mainPanel.add(petCreate);
-      mainPanel.revalidate();
-      mainPanel.repaint();
-    });
+    createPetBtn = makeCreatePetBtn(data);
 
     mainPanel.add(petList);
     mainPanel.add(createPetBtn);
@@ -241,5 +224,29 @@ public class PetPage {
     panel.add(jLabel);
     panel.add(jField);
     return jField;
+  }
+
+  // Helper to generate editable field with label
+  private JComboBox makeComboBox(String label, String[] nameList) {
+    JPanel panel = new JPanel();
+    JLabel jLabel = new JLabel(label);
+    JComboBox jComboBox = new JComboBox<>(nameList);
+    jComboBox.setPreferredSize(new Dimension(250, 40));
+    panel.add(jLabel);
+    panel.add(jComboBox);
+    return jComboBox;
+  }
+
+  private JButton makeCreatePetBtn(Data data) {
+    JButton jButton = new JButton("Add New Pet");
+    jButton.addActionListener(e -> {
+      mainPanel.removeAll();
+      petCreate = petCreate(data);
+      mainPanel.add(petCreate);
+      mainPanel.revalidate();
+      mainPanel.repaint();
+    });
+
+    return jButton;
   }
 }
