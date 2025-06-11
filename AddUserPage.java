@@ -2,7 +2,7 @@
 import javax.swing.JButton;
 import javax.swing.JPanel;
 
-public class AddUserPage {
+public class CustomerPage {
   public void gui (JPanel panel) {
     // panel.removeAll();
     // panel.add(new JButton("Add User Page"));

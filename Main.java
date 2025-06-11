@@ -60,7 +60,7 @@ public class Main extends JFrame implements ActionListener {
     userPageButton.setBounds(0, 0, 30, 30);
 
     // Add page icon
-    ImageIcon treatmentIcon = new ImageIcon(((new ImageIcon("./icons/add_icon_229px.png")).getImage()).getScaledInstance(30, 30, java.awt.Image.SCALE_SMOOTH));
+    ImageIcon treatmentIcon = new ImageIcon(((new ImageIcon("./icons/treatment_icon_200px.png")).getImage()).getScaledInstance(30, 30, java.awt.Image.SCALE_SMOOTH));
     treatmentPageButton = new JButton("Treatment", treatmentIcon);
     treatmentPageButton.setContentAreaFilled(false); // transparent background
     treatmentPageButton.setBorderPainted(false); // set border to none
@@ -104,7 +104,7 @@ public class Main extends JFrame implements ActionListener {
     if (e.getSource() == homePageButton) {
       new HomePage().gui(contentPanel);
     } else if (e.getSource() == userPageButton) {          
-      new AddUserPage().gui(contentPanel);
+      new CustomerPage().gui(contentPanel);
     } else if (e.getSource() == treatmentPageButton) {
       new TreatmentTransactionPanel().gui(contentPanel);
     }

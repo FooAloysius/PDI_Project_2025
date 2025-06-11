@@ -100,6 +100,7 @@ public class  Transaction {
     public double getFinalAmount() {
         return finalAmount;
     }
-} {
+} 
+{
   
 }

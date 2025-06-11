@@ -79,6 +79,9 @@ public class Data {
     }
   }
 
+  public List<PetOwner> getCustomers () {
+    return customers;
+  }
 
   public int getPetSize () {
     return pets.size();

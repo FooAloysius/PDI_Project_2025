@@ -47,6 +47,7 @@ public class HomePage {
 
     // Image Icon for pet view
     ImageIcon petViewIcon = new ImageIcon(((new ImageIcon("./images/pet_image_1280px.png")).getImage()).getScaledInstance(300, 300, java.awt.Image.SCALE_SMOOTH));
+    ImageIcon petViewIconHover = new ImageIcon(((new ImageIcon("./images/pet_image_hover_1280px.png")).getImage()).getScaledInstance(300, 300, java.awt.Image.SCALE_SMOOTH));
     // button to pet panel
     JButton petViewButton = new JButton("View Pets", petViewIcon);
     petViewButton.setContentAreaFilled(false); // transparent background
@@ -55,9 +56,14 @@ public class HomePage {
     petViewButton.setFocusable(false);
     petViewButton.setVerticalTextPosition(JButton.BOTTOM);
     petViewButton.setHorizontalTextPosition(JButton.CENTER);
+    petViewButton.setRolloverIcon(petViewIconHover);
+    petViewButton.addActionListener((actionEvent) -> {
+      new CustomerPage().gui(panel);
+    });
 
     // Image Icon for pet view
     ImageIcon customerViewIcon = new ImageIcon(((new ImageIcon("./images/customer_image_900px.png")).getImage()).getScaledInstance(220, 300, java.awt.Image.SCALE_SMOOTH));
+    ImageIcon customerViewIconHover = new ImageIcon(((new ImageIcon("./images/customer_image_hover_900px.png")).getImage()).getScaledInstance(220, 300, java.awt.Image.SCALE_SMOOTH)); // hover icon
     // button to pet panel
     JButton customerViewButton = new JButton("View Customers", customerViewIcon);
     customerViewButton.setContentAreaFilled(false); // transparent background
@@ -66,6 +72,10 @@ public class HomePage {
     customerViewButton.setFocusable(false);
     customerViewButton.setVerticalTextPosition(JButton.BOTTOM);
     customerViewButton.setHorizontalTextPosition(JButton.CENTER);
+    customerViewButton.setRolloverIcon(customerViewIconHover);
+    customerViewButton.addActionListener((actionEvent) -> {
+      new CustomerPage().gui(panel);
+    });
 
     petNavPanel.add(petViewButton);
     petNavPanel.add(customerViewButton);
