@@ -21,6 +21,7 @@ public class HomePage {
   private JTextField emailField;
   private JTextField petsField;
   CustomerPage customerPage = new CustomerPage();
+  PetPage petPage = new PetPage();
 
   JLabel labelDateTime;
   public void gui (JPanel panel, Data data) {
@@ -55,7 +56,7 @@ public class HomePage {
     petViewButton.setHorizontalTextPosition(JButton.CENTER);
     petViewButton.setRolloverIcon(petViewIconHover);
     petViewButton.addActionListener((actionEvent) -> {
-      customerPage.gui(panel, data);
+      petPage.gui(panel, data);
     });
 
     // Image Icon for pet view

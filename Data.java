@@ -166,11 +166,11 @@ public class Data {
   }
 
   // 修改宠物信息（单个字段示例，也可以合并所有字段修改）
-  public void updatePet(Pet petToUpdate, String petName, String petSpecies, String petBreed, int petAge) {
-    petToUpdate.setPetName(petName);
-    petToUpdate.setPetSpecies(petSpecies);
-    petToUpdate.setPetBreed(petBreed);
-    petToUpdate.setPetAge(petAge);
+  public void modifyPet(String petName, String petSpecies, String petBreed, int petAge, Pet pet) {
+    pet.setPetName(petName);
+    pet.setPetSpecies(petSpecies);
+    pet.setPetBreed(petBreed);
+    pet.setPetAge(petAge);
     savePets();
   }
 

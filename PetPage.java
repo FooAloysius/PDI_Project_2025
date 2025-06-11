@@ -98,35 +98,33 @@ public class PetPage {
     JTextField speciesField = makeEditableField("Species:", pet.getPetSpecies());
     JTextField breedField = makeEditableField("Breed:", pet.getPetBreed());
     JTextField ageField = makeEditableField("Age:", Integer.toString(pet.getPetAge()));
-    JTextField ownerField = makeEditableField("Owner ID:", pet.getPetOwnerID());
+
+    JPanel ownerFeildPanel = new JPanel();
+    ownerFeildPanel.setLayout(new BoxLayout(ownerFeildPanel, BoxLayout.Y_AXIS));
+    ownerFeildPanel.setPreferredSize(new Dimension(400, 300));
+    ownerFeildPanel.add(makeLabelField("Pet ID:", pet.getPetOwnerID()));
 
     nameField.addFocusListener(new FocusAdapter() {
       public void focusLost(FocusEvent e) {
-        pet.setPetName(nameField.getText());
+        data.modifyPet(nameField.getText(), speciesField.getText(), breedField.getText(), Integer.parseInt(ageField.getText()), pet);
       }
     });
 
     speciesField.addFocusListener(new FocusAdapter() {
       public void focusLost(FocusEvent e) {
-        pet.setPetSpecies(speciesField.getText());
+        data.modifyPet(nameField.getText(), speciesField.getText(), breedField.getText(), Integer.parseInt(ageField.getText()), pet);
       }
     });
 
     breedField.addFocusListener(new FocusAdapter() {
       public void focusLost(FocusEvent e) {
-        pet.setPetBreed(breedField.getText());
+        data.modifyPet(nameField.getText(), speciesField.getText(), breedField.getText(), Integer.parseInt(ageField.getText()), pet);
       }
     });
 
     ageField.addFocusListener(new FocusAdapter() {
       public void focusLost(FocusEvent e) {
-        pet.setPetAge(Integer.parseInt(ageField.getText()));
-      }
-    });
-
-    ownerField.addFocusListener(new FocusAdapter() {
-      public void focusLost(FocusEvent e) {
-        pet.setPetOwnerID(ownerField.getText());
+        data.modifyPet(nameField.getText(), speciesField.getText(), breedField.getText(), Integer.parseInt(ageField.getText()), pet);
       }
     });
 
@@ -139,7 +137,6 @@ public class PetPage {
     petModifyPanel.add(speciesField.getParent());
     petModifyPanel.add(breedField.getParent());
     petModifyPanel.add(ageField.getParent());
-    petModifyPanel.add(ownerField.getParent());
     petModifyPanel.add(backButton);
 
     return petModifyPanel;
@@ -182,6 +179,7 @@ public class PetPage {
     return petCreatePanel;
   }
 
+  // initialize for gui
   public void gui(JPanel panel, Data data) {
     mainPanel = panel;
     panel.removeAll();
