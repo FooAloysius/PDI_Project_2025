@@ -25,6 +25,7 @@ public class CustomerPage {
   JPanel mainPanel;
   JPanel modal;
   JPanel customerList;
+  JPanel customerCreate;
   Color LIGHTBEACH = new Color(255, 254, 236);
   Color WHITE = new Color(255, 254, 242);
 
@@ -161,14 +162,78 @@ public class CustomerPage {
     return customerModifyModal;
   }
 
+  public JPanel customerCreate (Data data) {
+    JPanel customerModifyModal = new JPanel();
+    customerModifyModal.setLayout(new BoxLayout(customerModifyModal, BoxLayout.Y_AXIS));
+    customerModifyModal.setPreferredSize(new Dimension(400,300));
+    
+    // customer id
+    JPanel idGroup = new JPanel();
+    JLabel idLabel = new JLabel("Customer ID: ");
+    int randomNumber = (int) (Math.random() * 1_000_000);
+    String customerID = String.format("Customer_%06d", randomNumber); // fix to 6 digit
+
+    JLabel idInput = new JLabel(customerID);
+    idInput.setPreferredSize(new Dimension(250,40));
+    idGroup.add(idLabel);
+    idGroup.add(idInput);
+
+    // customer name
+    JPanel nameGroup = new JPanel();
+    JLabel nameLabel = new JLabel("Customer Name: ");
+    JTextField nameInput = new JTextField();
+    nameInput.setPreferredSize(new Dimension(250,40));
+    nameGroup.add(nameLabel);
+    nameGroup.add(nameInput);
+    
+    // customer contact
+    JPanel contactGroup = new JPanel();
+    JLabel contactLabel = new JLabel("Customer contact: ");
+    JTextField contactInput = new JTextField();
+    contactInput.setPreferredSize(new Dimension(250,40));
+    contactGroup.add(contactLabel);
+    contactGroup.add(contactInput);
+
+    // create to customer List
+    JButton createButton = new JButton("Create");
+    createButton.addActionListener(e -> {
+      data.createCustomer(customerID, nameInput.getText(), Integer.parseInt(contactInput.getText()));
+      gui(data);
+    });
+
+    // back to customer List
+    JButton backButton = new JButton("Back");
+    backButton.addActionListener(e -> {
+      gui(data);
+    });
+    
+    customerModifyModal.add(idGroup);
+    customerModifyModal.add(Box.createVerticalStrut(20));
+    customerModifyModal.add(nameGroup);
+    customerModifyModal.add(contactGroup);
+    customerModifyModal.add(backButton);
+    customerModifyModal.add(createButton);
+
+    return customerModifyModal;
+  }
+
   public void gui (JPanel panel, Data data) {
     mainPanel = panel;
     panel.removeAll();
     panel.setLayout(new BoxLayout(panel, BoxLayout.PAGE_AXIS));
 
     customerList = customerList(data);
+    JButton createCustomerBtn = new JButton("Create New Customer");
+    createCustomerBtn.addActionListener(e -> {
+      mainPanel.removeAll();
+      customerCreate = customerCreate(data);
+      mainPanel.add(customerCreate);
+      mainPanel.revalidate();
+      mainPanel.repaint();
+    });
 
     panel.add(customerList);
+    panel.add(createCustomerBtn);
     panel.revalidate();
     panel.repaint();
   } 
@@ -178,8 +243,17 @@ public class CustomerPage {
     mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.PAGE_AXIS));
 
     customerList = customerList(data);
+    JButton createCustomerBtn = new JButton("Create New Customer");
+    createCustomerBtn.addActionListener(e -> {
+      mainPanel.removeAll();
+      customerCreate = customerCreate(data);
+      mainPanel.add(customerCreate);
+      mainPanel.revalidate();
+      mainPanel.repaint();
+    });
 
     mainPanel.add(customerList);
+    mainPanel.add(createCustomerBtn);
     mainPanel.revalidate();
     mainPanel.repaint();
   } 

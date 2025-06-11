@@ -88,10 +88,9 @@ public class Data {
   public String getCustomerName (int index) {
     String customerID = pets.get(index).getPetOwnerID();
 
-    // 遍历所有客户，找到ID匹配的
     for (PetOwner customer : customers) {
       if (customer.getPetOwnerID().equals(customerID)) {
-        return customer.getPetOwnerName(); // 找到名字，返回
+        return customer.getPetOwnerName();
       }
     }
       return "-";
@@ -111,6 +110,10 @@ public class Data {
     } catch (IOException e) {
       System.out.println("Error saving customer data: " + e.getMessage());
     }
+  }
+
+  public void createCustomer (String petOwnerID, String petOwnerName, int petOwnerContact) {
+    customers.add(new PetOwner(petOwnerID, petOwnerName, petOwnerContact));
   }
 
   public void removeCustomer (PetOwner customer) {

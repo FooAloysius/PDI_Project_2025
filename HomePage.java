@@ -95,14 +95,9 @@ public class HomePage {
         @Override
         public void actionPerformed(ActionEvent e) {
             LocalDateTime now = LocalDateTime.now();
-            // LocalTime time = LocalTime.now();
-            // ZonedDateTime zonedDateTime = ZonedDateTime.of(day, time, ZoneId.of("Asia/Kuala_Lumpur"));
-
-
             labelDateTime.setText(
               now.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"))
             );
-          
         }
     });
     timer.setInitialDelay(0);
