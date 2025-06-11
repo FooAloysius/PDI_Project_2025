@@ -104,7 +104,7 @@ public class HomePage {
 
 
             labelDateTime.setText(
-              DateTimeFormatter.ofLocalizedDateTime(FormatStyle.LONG).format(zonedDateTime)
+              DateTimeFormatter.ofLocalizedDateTime(FormatStyle.FULL).format(zonedDateTime)
             );
           
         }

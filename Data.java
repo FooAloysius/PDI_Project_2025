@@ -1,6 +1,8 @@
 import java.io.BufferedReader;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -83,8 +85,49 @@ public class Data {
     return customers;
   }
 
+  public String getCustomerName (int index) {
+    String customerID = pets.get(index).getPetOwnerID();
+
+    // 遍历所有客户，找到ID匹配的
+    for (PetOwner customer : customers) {
+      if (customer.getPetOwnerID().equals(customerID)) {
+        return customer.getPetOwnerName(); // 找到名字，返回
+      }
+    }
+      return "-";
+  }
+
+  public void saveCustomers() {
+    String filePath = CSVPath + CustomersFileName;
+
+    try (PrintWriter pw = new PrintWriter(new FileWriter(filePath, false))) {
+      for (PetOwner customer : customers) {
+        String line = String.format("%s,%s,%d",
+          customer.getPetOwnerID(),
+          customer.getPetOwnerName(),
+          customer.getPetOwnerContact());
+        pw.println(line);
+      }
+    } catch (IOException e) {
+      System.out.println("Error saving customer data: " + e.getMessage());
+    }
+  }
+
   public void removeCustomer (PetOwner customer) {
     customers.remove(customer);
+    saveCustomers();
+  }
+
+  // customer name
+  public void modifyCustomerDetails (String name, PetOwner customer) {
+    customer.setPetOwnerName(name);
+    saveCustomers();
+  }
+
+  // customer contact
+  public void modifyCustomerDetails (int contact, PetOwner customer) {
+    customer.setPetOwnerContact(contact);
+    saveCustomers();
   }
 
   public int getPetSize () {

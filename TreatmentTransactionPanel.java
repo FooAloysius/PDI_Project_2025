@@ -1,4 +1,6 @@
 import java.awt.*;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -6,32 +8,54 @@ import javax.swing.table.DefaultTableModel;
 /*
 * AUTHOR: Jun Xiang
 * CREATED: 25/05/2025
-* MODIFIED: 10/06/2025 (Added Pet ComboBox + Consultation Fee Validation)
+* MODIFIED: 11/06/2025 (Integrated teacher feedback)
 */
 public class TreatmentTransactionPanel extends JPanel {
     private Data data;
     private JTable table;
     private JTextField consultationField;
-    private JLabel totalLabel;
+    private JLabel subtotalLabel, taxLabel, totalLabel, ownerLabel, dateTimeLabel;
 
     private List<Treatment> treatmentList;
-    
+
     public TreatmentTransactionPanel(Data data) {
         this.data = data;
         initUI();
     }
-    
+
     public void initUI() {
         setLayout(new BorderLayout());
 
+        // Pet Selection (ComboBox) 
         String[] petNames = data.getPetsNameList();
-
         JComboBox<String> petComboBox = new JComboBox<>(petNames);
-        JPanel petPanel = new JPanel(new FlowLayout());
-        petPanel.add(new JLabel("Select Pet:"));
-        petPanel.add(petComboBox);
-        add(petPanel, BorderLayout.NORTH); //
 
+        //  Pet Owner Display 
+        ownerLabel = new JLabel("Pet Owner: -");
+
+        //  DateTime of Visit Field 
+        LocalDateTime now = LocalDateTime.now();
+        String formattedDateTime = now.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
+        dateTimeLabel = new JLabel("Date & Time of Visit: " + formattedDateTime);
+
+        JPanel petPanel = new JPanel(new GridLayout(3, 1));
+        JPanel topRow = new JPanel(new FlowLayout());
+        topRow.add(new JLabel("Select Pet:"));
+        topRow.add(petComboBox);
+        petPanel.add(topRow);
+        petPanel.add(ownerLabel);
+        petPanel.add(dateTimeLabel);
+        add(petPanel, BorderLayout.NORTH); // Top of panel
+
+
+        // Pet ComboBox Listener to update Pet Owner 
+        petComboBox.addActionListener(e -> {
+            int selectedIndex = petComboBox.getSelectedIndex();
+            String customerName = this.data.getCustomerName(selectedIndex);
+            ownerLabel.setText("Pet Owner: " + customerName);
+        });
+
+        // Treatment Table: Multi-Selection Enabled 
         treatmentList = Treatment.loadFromCSV("./csv/Treatments.csv");
         String[] columnNames = {"ID", "Name", "Fee (RM)"};
         DefaultTableModel tableModel = new DefaultTableModel(columnNames, 0);
@@ -40,41 +64,45 @@ public class TreatmentTransactionPanel extends JPanel {
         }
 
         table = new JTable(tableModel);
-        table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION); //
+        table.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION); // Multi-select
         JScrollPane scrollPane = new JScrollPane(table);
         add(scrollPane, BorderLayout.CENTER);
 
-        // === Step 3: Consultation Fee + Total ===
-        JPanel bottomPanel = new JPanel(new GridLayout(3, 2, 5, 5));
-        bottomPanel.setBorder(BorderFactory.createTitledBorder("Consultation & Total"));
+        // Bottom Panel: Subtotal / Tax / Total 
+        JPanel bottomPanel = new JPanel(new GridLayout(5, 2, 5, 5));
+        bottomPanel.setBorder(BorderFactory.createTitledBorder("Transaction Summary"));
 
         bottomPanel.add(new JLabel("Consultation Fee (RM):"));
         consultationField = new JTextField("0.00");
         bottomPanel.add(consultationField);
 
+        subtotalLabel = new JLabel("Subtotal: RM 0.00");
+        bottomPanel.add(subtotalLabel);
+        taxLabel = new JLabel("Tax (6%): RM 0.00");
+        bottomPanel.add(taxLabel);
+        totalLabel = new JLabel("Grand Total: RM 0.00");
+        bottomPanel.add(totalLabel);
+
         JButton calcButton = new JButton("Calculate Total");
         bottomPanel.add(calcButton);
 
-        totalLabel = new JLabel("Final Total: RM 0.00");
-        bottomPanel.add(totalLabel);
-
         add(bottomPanel, BorderLayout.SOUTH);
 
-        // === Step 4: Button Action ===
+        //  Button Action: Calculate Total from multiple treatments 
         calcButton.addActionListener(e -> calculateTotal());
     }
 
     private void calculateTotal() {
         try {
-            int selectedRow = table.getSelectedRow();
-            if (selectedRow == -1) {
-                JOptionPane.showMessageDialog(this, "Please select one treatment.");
+            int[] selectedRows = table.getSelectedRows();
+            if (selectedRows.length == 0) {
+                JOptionPane.showMessageDialog(this, "Please select at least one treatment.");
                 return;
             }
 
             double consultationFee = Double.parseDouble(consultationField.getText());
 
-            // Validate consultation fee range
+            //Consultation Fee Validation 
             if (consultationFee < 0) {
                 JOptionPane.showMessageDialog(this, "Consultation fee cannot be negative.");
                 return;
@@ -83,10 +111,19 @@ public class TreatmentTransactionPanel extends JPanel {
                 return;
             }
 
-            double treatmentFee = treatmentList.get(selectedRow).getTreatmentFee();
-            double finalTotal = treatmentFee + (treatmentFee * 0.06) + consultationFee;
+            //Subtotal Calculation 
+            double subtotal = 0.0;
+            for (int row : selectedRows) {
+                subtotal += treatmentList.get(row).getTreatmentFee();
+            }
 
-            totalLabel.setText(String.format("Final Total: RM %.2f", finalTotal));
+            double tax = subtotal * 0.06;
+            double grandTotal = subtotal + tax + consultationFee;
+
+            //Update Summary Labels 
+            subtotalLabel.setText(String.format("Subtotal: RM %.2f", subtotal));
+            taxLabel.setText(String.format("Tax (6%%): RM %.2f", tax));
+            totalLabel.setText(String.format("Grand Total: RM %.2f", grandTotal));
         } catch (NumberFormatException ex) {
             JOptionPane.showMessageDialog(this, "Invalid consultation fee.");
         }

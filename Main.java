@@ -47,7 +47,7 @@ public class Main extends JFrame implements ActionListener {
     
     // User page icon
     ImageIcon userIcon = new ImageIcon(((new ImageIcon("./icons/user_icon_229px.png")).getImage()).getScaledInstance(30, 30, java.awt.Image.SCALE_SMOOTH));
-    userPageButton = new JButton("Create Cutomer", userIcon);
+    userPageButton = new JButton("Cutomer", userIcon);
     userPageButton.setContentAreaFilled(false); // transparent background
     userPageButton.setBorderPainted(false); // set border to none
     userPageButton.setCursor(new Cursor(Cursor.HAND_CURSOR)); // when mouse hover, set cursor to pointer

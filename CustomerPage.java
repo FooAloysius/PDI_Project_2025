@@ -3,6 +3,8 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Cursor;
 import java.awt.Dimension;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.List;
@@ -13,22 +15,32 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+/*
+ * https://www.tutorialspoint.com/awt/awt_focusadapter.htm
+ * 
+ * 
+ */
 
 public class CustomerPage {
   JPanel mainPanel;
   JPanel modal;
+  JPanel customerList;
+  Color LIGHTBEACH = new Color(255, 254, 236);
+  Color WHITE = new Color(255, 254, 242);
+
   public JPanel customerList (Data data) {
     List<PetOwner> customers= data.getCustomers();
 
     JPanel listPanel = new JPanel();
     listPanel.setLayout(new BoxLayout(listPanel, BoxLayout.Y_AXIS)); // layout for list
+    listPanel.setBackground(WHITE);
 
     for (PetOwner customer: customers) {
       JPanel listElement = new JPanel();
-      listElement.setLayout(new BoxLayout(listElement, BoxLayout.X_AXIS));
-      listElement.setBackground(Color.LIGHT_GRAY);
+      listElement.setLayout(new BoxLayout(listElement, BoxLayout.Y_AXIS));
+      listElement.setBackground(LIGHTBEACH);
       listElement.setPreferredSize(new Dimension(400, 30));
-      listElement.setAlignmentX(Component.LEFT_ALIGNMENT);
+      listElement.setAlignmentX(Component.CENTER_ALIGNMENT);
 
       listElement.addMouseListener(new MouseAdapter() {
         public void mouseClicked(MouseEvent e) {
@@ -37,14 +49,19 @@ public class CustomerPage {
       });
       
       JLabel nameLabel = new JLabel(customer.getPetOwnerName());
+      nameLabel.setBackground(LIGHTBEACH);
+
+      JPanel actionBox = new JPanel();
+      actionBox.setLayout(new BoxLayout(actionBox, BoxLayout.X_AXIS));
+      actionBox.setOpaque(true);
 
       // Image Icon for trash bin 
       ImageIcon trashBinIcon = new ImageIcon(((new ImageIcon("./icons/trash_icon_229px.png")).getImage()).getScaledInstance(30, 30, java.awt.Image.SCALE_SMOOTH));
       ImageIcon trashBinIconHover = new ImageIcon(((new ImageIcon("./icons/trash_icon_hover_229px.png")).getImage()).getScaledInstance(30, 30, java.awt.Image.SCALE_SMOOTH)); // hover icon
       // button to pet panel
-      JButton trashBinButton = new JButton("Remove user", trashBinIcon);
-      trashBinButton.setContentAreaFilled(false); // transparent background
+      JButton trashBinButton = new JButton("Remove customer", trashBinIcon);
       trashBinButton.setBorderPainted(false); // set border to none
+      trashBinButton.setBackground(LIGHTBEACH);
       trashBinButton.setCursor(new Cursor(Cursor.HAND_CURSOR)); // when mouse hover, set cursor to pointer
       trashBinButton.setFocusable(false);
       trashBinButton.setVerticalTextPosition(JButton.BOTTOM);
@@ -63,24 +80,25 @@ public class CustomerPage {
       ImageIcon modifierIconHover = new ImageIcon(((new ImageIcon("./icons/pencil_icon_hover_200px.png")).getImage()).getScaledInstance(30, 30, java.awt.Image.SCALE_SMOOTH)); // hover icon
       // button to pet panel
       JButton modifierButton = new JButton("Modify details", modifierIcon);
-      modifierButton.setContentAreaFilled(false); // transparent background
       modifierButton.setBorderPainted(false); // set border to none
+      modifierButton.setBackground(LIGHTBEACH);
       modifierButton.setCursor(new Cursor(Cursor.HAND_CURSOR)); // when mouse hover, set cursor to pointer
       modifierButton.setFocusable(false);
       modifierButton.setVerticalTextPosition(JButton.BOTTOM);
       modifierButton.setHorizontalTextPosition(JButton.CENTER);
       modifierButton.setRolloverIcon(modifierIconHover);
       modifierButton.addActionListener((actionEvent) -> {
-        modal = customerModify(customer);
+        modal = customerModify(customer, data);
         mainPanel.removeAll();
         mainPanel.add(modal);
         mainPanel.revalidate();
         mainPanel.repaint();
       });
       
+      actionBox.add(trashBinButton);
+      actionBox.add(modifierButton);
       listElement.add(nameLabel);
-      listElement.add(trashBinButton);
-      listElement.add(modifierButton);
+      listElement.add(actionBox);
       listPanel.add(Box.createVerticalStrut(5));
       listPanel.add(listElement);
       
@@ -89,7 +107,7 @@ public class CustomerPage {
     return listPanel;
   }
   
-  public JPanel customerModify (PetOwner customer) {
+  public JPanel customerModify (PetOwner customer, Data data) {
     JPanel customerModifyModal = new JPanel();
     customerModifyModal.setLayout(new BoxLayout(customerModifyModal, BoxLayout.Y_AXIS));
     customerModifyModal.setPreferredSize(new Dimension(400,300));
@@ -109,6 +127,11 @@ public class CustomerPage {
     nameInput.setPreferredSize(new Dimension(250,40));
     nameGroup.add(nameLabel);
     nameGroup.add(nameInput);
+    nameInput.addFocusListener(new FocusAdapter() {
+      public void focusLost (FocusEvent e) {
+        data.modifyCustomerDetails(nameInput.getText(), customer);
+      }
+    });
     
     // customer contact
     JPanel contactGroup = new JPanel();
@@ -117,12 +140,23 @@ public class CustomerPage {
     contactInput.setPreferredSize(new Dimension(250,40));
     contactGroup.add(contactLabel);
     contactGroup.add(contactInput);
+    contactInput.addFocusListener(new FocusAdapter() {
+      public void focusLost (FocusEvent e) {
+        data.modifyCustomerDetails(Integer.parseInt(contactInput.getText()), customer);
+      }
+    });
+
+    // back to customer List
+    JButton backButton = new JButton("Back");
+    backButton.addActionListener(e -> {
+      gui(data);
+    });
     
     customerModifyModal.add(idGroup);
     customerModifyModal.add(Box.createVerticalStrut(20));
     customerModifyModal.add(nameGroup);
-    // customerModifyModal.add(Box.createRigidArea(new Dimension(0,30)));
     customerModifyModal.add(contactGroup);
+    customerModifyModal.add(backButton);
 
     return customerModifyModal;
   }
@@ -132,11 +166,22 @@ public class CustomerPage {
     panel.removeAll();
     panel.setLayout(new BoxLayout(panel, BoxLayout.PAGE_AXIS));
 
-    JPanel customerList = customerList(data);
+    customerList = customerList(data);
 
     panel.add(customerList);
     panel.revalidate();
     panel.repaint();
+  } 
+
+  public void gui (Data data) {
+    mainPanel.removeAll();
+    mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.PAGE_AXIS));
+
+    customerList = customerList(data);
+
+    mainPanel.add(customerList);
+    mainPanel.revalidate();
+    mainPanel.repaint();
   } 
   
 }

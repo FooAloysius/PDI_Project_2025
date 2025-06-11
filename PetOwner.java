@@ -58,9 +58,6 @@ public class PetOwner {
     this.petOwnerContact = pPetOwnerContact;
   }
 
-  public void removePetOwner () {
-    
-  }
 
   /*
   * DEFAULT CONSTRUCTOR
