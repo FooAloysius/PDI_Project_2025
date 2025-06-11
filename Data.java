@@ -133,9 +133,55 @@ public class Data {
     saveCustomers();
   }
 
+  // 保存所有宠物数据到 CSV 文件
+  public void savePets() {
+    String filePath = CSVPath + PetsFileName;
+
+    try (PrintWriter pw = new PrintWriter(new FileWriter(filePath, false))) {
+      for (Pet pet : pets) {
+        String line = String.format("%s,%s,%s,%s,%d,%s",
+          pet.getPetID(),
+          pet.getPetName(),
+          pet.getPetSpecies(),
+          pet.getPetBreed(),
+          pet.getPetAge(),
+          pet.getPetOwnerID());
+        pw.println(line);
+      }
+    } catch (IOException e) {
+      System.out.println("Error saving pet data: " + e.getMessage());
+    }
+  }
+
+  // 添加新的宠物记录
+  public void createPet(String petID, String petName, String petSpecies, String petBreed, int petAge, String petOwnerID) {
+    pets.add(new Pet(petID, petName, petSpecies, petBreed, petAge, petOwnerID));
+    savePets(); // 保存至 CSV 文件
+  }
+
+  // 删除宠物记录
+  public void removePet(Pet pet) {
+    pets.remove(pet);
+    savePets(); // 同样保存更改
+  }
+
+  // 修改宠物信息（单个字段示例，也可以合并所有字段修改）
+  public void updatePet(Pet petToUpdate, String petName, String petSpecies, String petBreed, int petAge) {
+    petToUpdate.setPetName(petName);
+    petToUpdate.setPetSpecies(petSpecies);
+    petToUpdate.setPetBreed(petBreed);
+    petToUpdate.setPetAge(petAge);
+    savePets();
+  }
+
+  public List<Pet> getPets() {
+    return pets;
+  }
+
   public int getPetSize () {
     return pets.size();
   }
+  
 
   public String[] getPetsNameList () {
     String[] petsName = new String[this.getPetSize()];
