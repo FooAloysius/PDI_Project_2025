@@ -1,6 +1,13 @@
 import java.text.DecimalFormat;
 import java.util.Comparator;
 
+/*
+Author: Angel  
+Purpose: All the methods for accessing/mutating receipt info  
+Created: 15/05/2025  
+Modified: 12/06/2025 
+*/  
+
 public class Receipt {
   // Fields
   private Transaction transaction;
