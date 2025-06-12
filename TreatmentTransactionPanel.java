@@ -17,7 +17,6 @@ public class TreatmentTransactionPanel extends JPanel {
     private JTextField consultationField;
     private JLabel subtotalLabel, taxLabel, totalLabel, ownerLabel, dateTimeLabel;
     private JPanel selectedtreatmentsPanel, selectedTreatmentsList;
-    private JLabel selectedTreatmentsLabel;
 
     private List<Treatment> treatmentList;
 
@@ -80,18 +79,16 @@ public class TreatmentTransactionPanel extends JPanel {
         bottomPanel.add(consultationField);
 
         // added treatments list choosen
-        List<String> selectedTreatments = getSelectedTreatmentNames();
+        // List<String> selectedTreatments = getSelectedTreatmentNames();
         selectedtreatmentsPanel = new JPanel();
         selectedtreatmentsPanel.setPreferredSize(new Dimension(180,400));
-        selectedtreatmentsPanel.setLayout(new BoxLayout(selectedtreatmentsPanel, BoxLayout.Y_AXIS));
-        selectedTreatmentsLabel = new JLabel("Selected Treatments:");
-        selectedtreatmentsPanel.add(selectedTreatmentsLabel);
+        selectedtreatmentsPanel.setBorder(BorderFactory.createTitledBorder("Treatment Selected"));
 
         selectedTreatmentsList = new JPanel();
-        for (String treatment: selectedTreatments) {
-            selectedTreatmentsList.add(new JLabel(treatment));
-        }
-        selectedtreatmentsPanel.add(selectedTreatmentsLabel);
+        selectedTreatmentsList.setLayout(new BoxLayout(selectedTreatmentsList, BoxLayout.Y_AXIS));
+        // for (String treatment: selectedTreatments) {
+        //     selectedTreatmentsList.add(new JLabel(treatment));
+        // }
         selectedtreatmentsPanel.add(selectedTreatmentsList);
 
         
@@ -132,12 +129,11 @@ public class TreatmentTransactionPanel extends JPanel {
                 return;
             }
 
-            // added treatments list choosen
-            List<String> selectedTreatments = getSelectedTreatmentNames();
-            selectedtreatmentsPanel.add(new JLabel("Selected Treatments:"));
+            // added treatments list selected
             selectedTreatmentsList.removeAll();
-            for (String treatment: selectedTreatments) {
-                selectedTreatmentsList.add(new JLabel(treatment));
+
+            for (int row : selectedRows) {
+                selectedTreatmentsList.add(new JLabel(treatmentList.get(row).getTreatmentName() + ": " + treatmentList.get(row).getTreatmentFee()));
             }
 
             //Subtotal Calculation 
@@ -145,6 +141,9 @@ public class TreatmentTransactionPanel extends JPanel {
             for (int row : selectedRows) {
                 subtotal += treatmentList.get(row).getTreatmentFee();
             }
+
+            // added subtotal under treatment list selected
+            selectedTreatmentsList.add(new JLabel("Subtotal: " + subtotal));
 
             double tax = subtotal * 0.10;
             double grandTotal = subtotal + tax + consultationFee;
