@@ -2,8 +2,29 @@ AUthor: Foo, JunXiang, Angel
 Created: 24/05/2025
 Modified: 25/05/2025
 CLASS Main:
-  Class Feild:
-    
+  Inherits: JFrame, implements ActionListener
+
+  Class Fields:
+    DECLARE sideBarPanel AS JPanel                  // Sidebar panel for navigation
+    DECLARE contentPanel AS STATIC JPanel           // Main content area panel
+    DECLARE homePageButton AS JButton               // Button to navigate Home page
+    DECLARE userPageButton AS JButton               // Button to navigate Customer page
+    DECLARE treatmentPageButton AS JButton          // Button to navigate Treatment page
+    DECLARE paymentPageButton AS JButton            // Button to navigate Payment page
+    DECLARE data AS STATIC Data                     // Shared data instance
+    DECLARE latestTotalFee AS STATIC DOUBLE = 0.00  // Latest total fee for transaction
+    DECLARE treatmentTransactionPanel AS TreatmentTransactionPanel  // Treatment panel
+    DECLARE selectedTreatmentNames AS STATIC List OF String         // Selected treatment names for current session
+
+  PROCEDURE: main
+  PURPOSE: Entry point for the entire application
+  IMPORT: args (ARRAY OF STRING)
+  EXPORT: none
+  ALGORITHM:
+    SET data = NEW Data()
+    CALL data.init()     // Load data from CSV files
+    CREATE new Main object
+    CALL mainGui()       // Launch the GUI interface
 
 Author: Foo
 Purpose: All the method for initialize and accessing/mutating all the info (pet, petOwner)
