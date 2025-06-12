@@ -675,202 +675,209 @@ CLASS Transaction
 END CLASS
 
 
-Author: Angel
-Purpose: All the method for accessing/mutating receipt info
-Created: 15/05/2025
-Modified: 23/05/2025
+Author: Angel  
+Purpose: All the methods for accessing/mutating receipt info  
+Created: 15/05/2025  
+Modified: 12/06/2025  
+
 CLASS Receipt
 
-        ATTRIBUTES:
-                Transaction transaction
-                Payment payment
+    ATTRIBUTES:
+        Transaction transaction     // Holds transaction details
+        Payment payment             // Holds payment details
 
-        // DEFAULT CONSTRUCTOR
-        CONSTRUCTOR()
-            SET transaction = null
-            SET payment = null
-        END CONSTRUCTOR
+    // Default constructor initializes empty receipt
+    CONSTRUCTOR()
+        SET transaction = null
+        SET payment = null
+    END CONSTRUCTOR
 
-        // PARAMETER CONSTRUCTOR
-        CONSTRUCTOR(transaction, payment)
-            SET this.transaction = transaction
-            SET this.payment = payment
+    // Constructor with parameters
+    CONSTRUCTOR(transaction, payment)
+        SET this.transaction = transaction
+        SET this.payment = payment
+    END CONSTRUCTOR
 
-        // COPY CONSTRUCTOR
-        CONSTRUCTOR(otherReceipt)
-            SET this.transaction = otherReceipt.transaction
-            SET this.payment = otherReceipt.payment
-        END CONSTRUCTOR
+    // Copy constructor
+    CONSTRUCTOR(otherReceipt)
+        SET this.transaction = otherReceipt.transaction
+        SET this.payment = otherReceipt.payment
+    END CONSTRUCTOR
 
+    /*
+     * Generates a formatted string containing receipt details
+     * Includes treatment info, costs, and payment summary
+     */
+    METHOD generateReceiptText()
+        CREATE sb AS STRINGBUILDER
+        CREATE df AS DECIMALFORMAT WITH PATTERN "0.00"
 
-        METHOD generateReceiptText()
-                SORT transaction.treatments BY treatment.name ASCENDING  
+        APPEND "=== Animal Clinic Receipt ===\n" TO sb
+        APPEND "Date of Visit: " + transaction.getTransactionID() + "\n" TO sb
 
-                CREATE receiptText AS STRING
-                INCLUDE "=== Animal Clinic Receipt ===" IN receiptText
-                INCLUDE "Date of Visit: " + transaction.dateOfVisit IN receiptText
-                INCLUDE "Pet Owner: " + transaction.owner.name IN receiptText
-                INCLUDE "Pet Name: " + transaction.pet.name IN receiptText
+        APPEND "--- Treatments ---\n" TO sb
+        SORT transaction.treatmentList BY treatmentName ASCENDING
 
-                INCLUDE "--- Treatments ---" IN receiptText
+        FOR EACH treatment IN transaction.treatmentList DO
+            APPEND treatment.treatmentName + " - RM " + df.format(treatment.treatmentFee) + "\n" TO sb
+        END FOR
 
-                FOR EACH treatment IN transaction.treatments DO
-                        SET quantity = transaction.getQuantityForTreatment(treatment)
-                        SET cost = treatment.cost * quantity
-                        FORMAT cost TO 2 decimal places   // Payment amount will be in 2 decimal places format
-                        INCLUDE treatment.name + " x " + quantity + " - RM " + cost IN receiptText
-                END FOR
+        // Add breakdown of costs
+        APPEND "Consultation Fee: RM " + df.format(transaction.consultationFee) + "\n" TO sb
+        APPEND "Subtotal (Before Tax): RM " + df.format(transaction.totalAmount) + "\n" TO sb
+        APPEND "Tax (6%): RM " + df.format(transaction.taxAmount) + "\n" TO sb
+        APPEND "Total: RM " + df.format(transaction.finalAmount) + "\n\n" TO sb
 
-                FORMAT transaction.consultationFee TO 2 decimal places   // Payment amount will be in 2 decimal places format
-                FORMAT transaction.subtotal TO 2 decimal places          // Payment amount will be in 2 decimal places format
-                FORMAT transaction.taxAmount TO 2 decimal places         // Payment amount will be in 2 decimal places format
-                FORMAT transaction.totalCost TO 2 decimal places         // Payment amount will be in 2 decimal places format
+        // Add payment summary
+        APPEND "--- Payment Details ---\n" TO sb
+        APPEND payment.getPaymentSummary() TO sb
 
-                INCLUDE "Consultation Fee: RM " + transaction.consultationFee IN receiptText
-                INCLUDE "Subtotal (Before Tax): RM " + transaction.subtotal IN receiptText
-                INCLUDE "Tax (10%): RM " + transaction.taxAmount IN receiptText
-                INCLUDE "Total: RM " + transaction.totalCost IN receiptText
+        RETURN sb.toString()
+    END METHOD
 
-                INCLUDE "--- Payment Details ---" IN receiptText
-                INCLUDE payment.getPaymentSummary() IN receiptText
+    // Getter for transaction
+    METHOD getTransaction()
+        RETURN transaction
+    END METHOD
 
-                RETURN receiptText
-        END METHOD
+    // Getter for payment
+    METHOD getPayment()
+        RETURN payment
+    END METHOD
 
+    // Setter for transaction
+    METHOD setTransaction(value)
+        SET transaction = value
+    END METHOD
 
-        // GETTERS
-        METHOD getTransaction()
-                RETURN transaction
-        END METHOD
-
-        METHOD getPayment()
-                RETURN payment
-        END METHOD
-
-
-        // SETTERS
-        METHOD setTransaction(value)
-                SET transaction = value
-        END METHOD
-
-        METHOD setPayment(value)
-                SET payment = value
-        END METHOD
+    // Setter for payment
+    METHOD setPayment(value)
+        SET payment = value
+    END METHOD
 
 END CLASS
 
 
-Author: Angel
-Purpose: All the method for accessing/mutating payment info
-Created: 15/05/2025
-Modified: 23/05/2025
+Author: Angel  
+Purpose: All the methods for accessing/mutating payment info  
+Created: 15/05/2025  
+Modified: 12/06/2025  
+
 CLASS Payment
 
-        ATTRIBUTES:
-                String paymentMethod
-                Double amountPaid
-                Double balanceReturned
-                String paymentDate
-                String status
+    ATTRIBUTES:
+        String paymentMethod         // e.g. "Cash" or "Card"
+        Double amountPaid            // Amount paid by client
+        Double balanceReturned       // Change given back (for cash)
+        String paymentDate           // Date of payment
+        String status                // Status: "Paid", "Pending", or "Failed"
 
-        // DEFAULT CONSTRUCTOR
-        CONSTRUCTOR()
-            SET paymentMethod = ""
-            SET amountPaid = 0.0
-            SET paymentDate = ""
-            SET status = "Pending"
-            SET balancedReturned = 0.0
-        END CONSTRUCTOR
+    // Default constructor
+    CONSTRUCTOR()
+        SET paymentMethod = ""
+        SET amountPaid = 0.0
+        SET paymentDate = ""
+        SET status = "Pending"
+        SET balanceReturned = 0.0
+    END CONSTRUCTOR
 
-        // PARAMETER CONSTRUCTOR
-        CONSTRUCTOR(paymentMethod, amountPaid, paymentDate)
-            SET this.paymentMethod = paymentMethod
-            SET this.amountPaid = amountPaid
-            SET this.paymentDate = paymentDate
-            SET this.status = "Pending"
-            SET this.balanceReturned = 0.0
+    // Constructor with parameters
+    CONSTRUCTOR(paymentMethod, amountPaid, paymentDate)
+        SET this.paymentMethod = paymentMethod
+        SET this.amountPaid = amountPaid
+        SET this.paymentDate = paymentDate
+        SET this.status = "Pending"
+        SET this.balanceReturned = 0.0
+    END CONSTRUCTOR
 
-        // COPY CONSTRUCTOR
-        CONSTRUCTOR(otherPayment)
-            SET this.paymentMethod = otherPayment.paymentMethod
-            SET this.amountPaid = otherPayment.amountPaid
-            SET this.paymentDate = otherPayment.paymentDate
-            SET this.status = otherPayment.status
-            SET this.balanceReturned = otherPayment.balanceReturned
-        END CONSTRUCTOR
+    // Copy constructor
+    CONSTRUCTOR(otherPayment)
+        SET this.paymentMethod = otherPayment.paymentMethod
+        SET this.amountPaid = otherPayment.amountPaid
+        SET this.paymentDate = otherPayment.paymentDate
+        SET this.status = otherPayment.status
+        SET this.balanceReturned = otherPayment.balanceReturned
+    END CONSTRUCTOR
 
-        METHOD processPayment(totalCost)
-                IF paymentMethod = "Cash" THEN
-                        IF amountPaid >= totalCost THEN
-                                balanceReturned = amountPaid - totalCost
-                                FORMAT balanceReturned TO 2 decimal places   // Payment amount will be in 2 decimal places format
-                                status = "Paid"
-                        ELSE
-                                PRINT "Error: Insufficient cash payment."
-                                status = "Failed"
-                ELSE IF paymentMethod = "Card" THEN
-                        balanceReturned = 0.0
-                        status = "Paid"
-                ELSE
-                        PRINT "Error: Unknown payment method."
-                        status = "Failed"
-                END IF
-        END METHOD
+    /*
+     * Processes the payment based on method and amount
+     * Updates status and calculates change (if needed)
+     */
+    METHOD processPayment(totalCost)
+        CREATE df AS DECIMALFORMAT WITH PATTERN "0.00"
 
-        METHOD getPaymentSummary()
-                FORMAT amountPaid TO 2 decimal places        // Payment amount will be in 2 decimal places format
-                FORMAT balanceReturned TO 2 decimal places   // Payment amount will be in 2 decimal places format
+        IF paymentMethod EQUALS "Cash" (case-insensitive) THEN
+            IF amountPaid >= totalCost THEN
+                SET balanceReturned = amountPaid - totalCost
+                FORMAT balanceReturned TO 2 DECIMAL PLACES
+                SET status = "Paid"
+            ELSE
+                PRINT "Error: Insufficient cash payment."
+                SET status = "Failed"
+            END IF
+        ELSE IF paymentMethod EQUALS "Card" (case-insensitive) THEN
+            SET balanceReturned = 0.0
+            SET status = "Paid"
+        ELSE
+            PRINT "Error: Unknown payment method."
+            SET status = "Failed"
+        END IF
+    END METHOD
 
-                RETURN  "Payment Method: " + paymentMethod +
-                        "\nAmount Paid: RM " + amountPaid +
-                        "\nBalance Returned: RM " + balanceReturned +
-                        "\nPayment Date: " + paymentDate +
-                        "\nStatus: " + status
-        END METHOD
+    /*
+     * Returns formatted payment summary as string
+     */
+    METHOD getPaymentSummary()
+        CREATE df AS DECIMALFORMAT WITH PATTERN "0.00"
 
+        RETURN "Payment Method: " + paymentMethod +
+               "\nAmount Paid: RM " + df.format(amountPaid) +
+               "\nBalance Returned: RM " + df.format(balanceReturned) +
+               "\nPayment Date: " + paymentDate +
+               "\nStatus: " + status
+    END METHOD
 
-        // GETTERS
-        METHOD getPaymentMethod()
-                RETURN paymentMethod
-        END METHOD
+    // Getters
+    METHOD getPaymentMethod()
+        RETURN paymentMethod
+    END METHOD
 
-        METHOD getAmountPaid()
-                RETURN amountPaid
-        END METHOD
+    METHOD getAmountPaid()
+        RETURN amountPaid
+    END METHOD
 
-        METHOD getBalanceReturned()
-                RETURN balanceReturned
-        END METHOD
+    METHOD getBalanceReturned()
+        RETURN balanceReturned
+    END METHOD
 
-        METHOD getPaymentDate()
-                RETURN paymentDate
-        END METHOD
+    METHOD getPaymentDate()
+        RETURN paymentDate
+    END METHOD
 
-        METHOD getStatus()
-                RETURN status
-        END METHOD
+    METHOD getStatus()
+        RETURN status
+    END METHOD
 
+    // Setters
+    METHOD setPaymentMethod(value)
+        SET paymentMethod = value
+    END METHOD
 
-        // SETTERS
-        METHOD setPaymentMethod(value)
-                SET paymentMethod = value
-        END METHOD
+    METHOD setAmountPaid(value)
+        SET amountPaid = value
+    END METHOD
 
-        METHOD setAmountPaid(value)
-                SET amountPaid = value
-        END METHOD
+    METHOD setBalanceReturned(value)
+        SET balanceReturned = value
+    END METHOD
 
-        METHOD setBalanceReturned(value)
-                SET balanceReturned = value
-        END METHOD
+    METHOD setPaymentDate(value)
+        SET paymentDate = value
+    END METHOD
 
-        METHOD setPaymentDate(value)
-                SET paymentDate = value
-        END METHOD
-
-        METHOD setStatus(value)
-                SET status = value
-        END METHOD
+    METHOD setStatus(value)
+        SET status = value
+    END METHOD
 
 END CLASS
 
