@@ -610,7 +610,7 @@ END CLASS
 Author: Jun Xiang
 Purpose: All the method for accessing/mutating transaction info
 Created: 15/05/2025
-Modified: 23/05/2025
+Modified: 12/06/2025
 CLASS Transaction
 
   CLASS FIELDS:
@@ -621,107 +621,56 @@ CLASS Transaction
     consultationFee (Double)
     finalAmount (Double)
 
-  METHODS:
+  CONSTRUCTOR Transaction(id: String, list: Array of Treatment, fee: Double)
+    transactionID ← id
+    treatmentList ← list
+    consultationFee ← fee
+  END CONSTRUCTOR
 
-    Transaction()
-      IMPORT: none
-      EXPORT: none
-      ALGORITHM:
-        transactionID ← ""
-        treatmentList ← empty array
-        totalAmount ← 0.0
-        taxAmount ← 0.0
-        consultationFee ← 0.0
-        finalAmount ← 0.0
-    END Transaction
+  METHOD calculateTotalAmount(): Double
+    total ← 0.0
+    FOR EACH treatment IN treatmentList DO
+      total ← total + treatment.getTreatmentFee()
+    END FOR
+    totalAmount ← total
+    RETURN totalAmount
+  END METHOD
 
-    Transaction(id: String, list: Array of Treatment, consultFee: Double)
-      IMPORT: id, list, consultFee
-      EXPORT: none
-      ALGORITHM:
-        setTransactionID(id)
-        setTreatmentList(list)
-        setConsultationFee(consultFee)
-        calculateTotalAmount()
-        calculateFinalAmount()
-    END Transaction
+  METHOD calculateFinalAmount(): Double
+    taxAmount ← totalAmount * 0.10
+    finalAmount ← totalAmount + taxAmount + consultationFee
+    RETURN finalAmount
+  END METHOD
 
-    Transaction(copy: Transaction)
-      IMPORT: copy
-      EXPORT: none
-      ALGORITHM:
-        transactionID ← copy.getTransactionID()
-        treatmentList ← copy.getTreatmentList()
-        totalAmount ← copy.calculateTotalAmount()
-        consultationFee ← copy.getConsultationFee()
-        taxAmount ← totalAmount * 0.06
-        finalAmount ← totalAmount + taxAmount + consultationFee
-    END Transaction
+  METHOD setConsultationFee(fee: Double)
+    IF fee >= 1 AND fee <= 1000 THEN
+      consultationFee ← fee
+    END IF
+  END METHOD
 
-    getTransactionID()
-      IMPORT: none
-      EXPORT: String
-      ALGORITHM:
-        RETURN transactionID
-    END getTransactionID
+  METHOD getConsultationFee(): Double
+    RETURN consultationFee
+  END METHOD
 
-    setTransactionID(id: String)
-      IMPORT: id
-      EXPORT: none
-      ALGORITHM:
-        IF id IS NOT EMPTY THEN
-          transactionID ← id
-    END setTransactionID
+  METHOD getTotalAmount(): Double
+    RETURN totalAmount
+  END METHOD
 
-    getTreatmentList()
-      IMPORT: none
-      EXPORT: Array of Treatment
-      ALGORITHM:
-        RETURN treatmentList
-    END getTreatmentList
+  METHOD getTaxAmount(): Double
+    RETURN taxAmount
+  END METHOD
 
-    setTreatmentList(list: Array of Treatment)
-      IMPORT: list
-      EXPORT: none
-      ALGORITHM:
-        treatmentList ← list
-    END setTreatmentList
+  METHOD getFinalAmount(): Double
+    RETURN finalAmount
+  END METHOD
 
-    calculateTotalAmount()
-      IMPORT: none
-      EXPORT: Double
-      ALGORITHM:
-        total ← 0.0
-        FOR EACH treatment IN treatmentList DO
-          total ← total + treatment.getTreatmentFee()
-        END FOR
-        totalAmount ← total
-        RETURN totalAmount
-    END calculateTotalAmount
+  METHOD getTransactionID(): String
+    RETURN transactionID
+  END METHOD
 
-    calculateFinalAmount()
-      IMPORT: none
-      EXPORT: Double
-      ALGORITHM:
-        taxAmount ← totalAmount * 0.06
-        finalAmount ← totalAmount + taxAmount + consultationFee
-        RETURN finalAmount
-    END calculateFinalAmount
-
-    setConsultationFee(fee: Double)
-      IMPORT: fee
-      EXPORT: none
-      ALGORITHM:
-        IF fee >= 0 THEN
-          consultationFee ← fee
-    END setConsultationFee
-
-    getConsultationFee()
-      IMPORT: none
-      EXPORT: Double
-      ALGORITHM:
-        RETURN consultationFee
-    END getConsultationFee
+  METHOD getTreatmentList(): Array of Treatment
+    RETURN treatmentList
+  END METHOD
 
 END CLASS
 
