@@ -109,6 +109,7 @@ public class PetPage {
     speciesField.addFocusListener(new FocusAdapter() {
       public void focusLost(FocusEvent e) {
         data.modifyPet(nameField.getText(), speciesField.getText(), breedField.getText(), Integer.parseInt(ageField.getText()), pet);
+
       }
     });
 

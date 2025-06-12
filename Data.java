@@ -164,24 +164,29 @@ public class Data {
   // method for create new customer
   public void createCustomer (String petOwnerID, String petOwnerName, int petOwnerContact) {
     customers.add(new PetOwner(petOwnerID, petOwnerName, petOwnerContact));
+    Toast.showToast(petOwnerName + " Created!", 2000);
   }
 
   // method for removing customer
   public void removeCustomer (PetOwner customer) {
+    String customerName = customer.getPetOwnerName();
     customers.remove(customer);
     saveCustomers();
+    Toast.showToast(customerName + " Removed!", 2000);
   }
 
   // method modifier for customer name
   public void modifyCustomerDetails (String name, PetOwner customer) {
     customer.setPetOwnerName(name);
     saveCustomers();
+    Toast.showToast("All changed saved!", 2000);
   }
 
   // method modifier for customer contact
   public void modifyCustomerDetails (int contact, PetOwner customer) {
     customer.setPetOwnerContact(contact);
     saveCustomers();
+    Toast.showToast("All changed saved!", 2000);
   }
   /* ----------------END | CUSTOMER / PET OWNER---------------- */
 
@@ -230,12 +235,15 @@ public class Data {
   public void createPet(String petID, String petName, String petSpecies, String petBreed, int petAge, String petOwnerID) {
     pets.add(new Pet(petID, petName, petSpecies, petBreed, petAge, petOwnerID));
     savePets(); // save to CSV
+    Toast.showToast(petName + " Created!", 2000);
   }
 
   // method: remove pet
   public void removePet(Pet pet) {
+    String petName = pet.getPetName();
     pets.remove(pet);
     savePets(); // save to CSV
+    Toast.showToast(petName + " Removed!", 2000);
   }
 
   // Pet modifier
@@ -245,6 +253,7 @@ public class Data {
     pet.setPetBreed(petBreed);
     pet.setPetAge(petAge);
     savePets(); // save to CSV
+    Toast.showToast("All changed saved!", 2000);
   }
 
   // initialize for all the Data (from CSV file)

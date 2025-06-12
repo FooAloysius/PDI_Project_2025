@@ -29,6 +29,8 @@ public class Main extends JFrame implements ActionListener {
 
   // GUI start from here
   public void mainGui () {
+    Toast.setMainWindow(this);// initialize toast
+
     this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     this.setLayout(null);
     this.setSize(1200,700);
