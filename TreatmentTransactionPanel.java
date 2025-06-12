@@ -82,7 +82,7 @@ public class TreatmentTransactionPanel extends JPanel {
         // added treatments list choosen
         List<String> selectedTreatments = getSelectedTreatmentNames();
         selectedtreatmentsPanel = new JPanel();
-        selectedtreatmentsPanel.setPreferredSize(new Dimension(130,400));
+        selectedtreatmentsPanel.setPreferredSize(new Dimension(180,400));
         selectedtreatmentsPanel.setLayout(new BoxLayout(selectedtreatmentsPanel, BoxLayout.Y_AXIS));
         selectedTreatmentsLabel = new JLabel("Selected Treatments:");
         selectedtreatmentsPanel.add(selectedTreatmentsLabel);
