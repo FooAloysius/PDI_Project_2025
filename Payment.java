@@ -1,5 +1,12 @@
 import java.text.DecimalFormat;
 
+*/
+Author: Angel  
+Purpose: All the methods for accessing/mutating receipt info  
+Created: 15/05/2025  
+Modified: 12/06/2025 
+/*
+
 public class Payment {
   // Fields
   private String paymentMethod;
