@@ -1,4 +1,5 @@
 import java.awt.*;
+import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -65,16 +66,28 @@ Modified: 12/06/2025
     }
 
     private void saveReceiptToFile(String receiptContent) {
-        String fileName = "receipt_" + new SimpleDateFormat("yyyy-MM-dd_HH-mm").format(new Date()) + ".txt";
-
-        try (FileWriter writer = new FileWriter(fileName)) {
-            writer.write(receiptContent);
-            JOptionPane.showMessageDialog(this, "Receipt saved as: " + fileName,
-                    "Receipt Generated", JOptionPane.INFORMATION_MESSAGE);
-        } catch (IOException e) {
-            JOptionPane.showMessageDialog(this, "Failed to save receipt.",
-                    "Error", JOptionPane.ERROR_MESSAGE);
-            e.printStackTrace();
+    try {
+        // Created a folder name 'Receipts_file' to store the generated receipts
+        File folder = new File("Receipts_file");
+        if (!folder.exists()) {
+            folder.mkdir();
         }
+
+        // Filename is included with date and time
+        String fileName = "receipt_" + new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date()) + ".txt";
+        File receiptFile = new File(folder, fileName);
+
+        // Write the receipt content to file
+        try (FileWriter writer = new FileWriter(receiptFile)) {
+            writer.write(receiptContent);
+            JOptionPane.showMessageDialog(this, "Receipt saved in: Receipts_file/" + fileName,
+                    "Receipt Generated", JOptionPane.INFORMATION_MESSAGE);
+        }
+    } catch (IOException e) {
+        JOptionPane.showMessageDialog(this, "Failed to save receipt.",
+                "Error", JOptionPane.ERROR_MESSAGE);
+        e.printStackTrace();
     }
+}
+
 }

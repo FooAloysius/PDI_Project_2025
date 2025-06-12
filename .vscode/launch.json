@@ -6,6 +6,13 @@
     "configurations": [
         {
             "type": "java",
+            "name": "Main",
+            "request": "launch",
+            "mainClass": "Main",
+            "projectName": "PDI_Project_2025-2_4e33690b"
+        },
+        {
+            "type": "java",
             "name": "TreatmentTransactionPanel",
             "request": "launch",
             "mainClass": "TreatmentTransactionPanel",

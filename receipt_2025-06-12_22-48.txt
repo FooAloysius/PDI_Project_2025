@@ -1,0 +1,15 @@
+Date            : 12/06/2025
+Payment Method  : Cash
+--------------------------------------------
+Selected Treatments:
+ - Antibiotic Injection
+ - Wound Cleaning
+ - Ear Cleaning
+ - Nail Trimming
+--------------------------------------------
+Grand Amount    : RM 380.00
+Amount Paid     : RM 389.00
+Balance         : RM 9.00
+Status          : PAID
+--------------------------------------------
+   Thank you for visiting our clinic! 
