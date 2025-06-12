@@ -8,6 +8,13 @@ import javax.swing.*;
 
 public class ReceiptPanel extends JPanel {
 
+/*
+Author: Angel  
+Purpose: All the methods for accessing/mutating receipt info  
+Created: 15/05/2025  
+Modified: 12/06/2025 
+*/  
+    
     public ReceiptPanel(List<String> treatments, double grandAmount, String paymentMethod, double paidAmount) {
         this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         this.setBorder(BorderFactory.createEmptyBorder(20, 40, 20, 40));
