@@ -2,6 +2,13 @@ import java.awt.*;
 import java.time.LocalDate;
 import javax.swing.*;
 
+*/
+Author: Angel  
+Purpose: All the methods for accessing/mutating payment info  
+Created: 15/05/2025  
+Modified: 12/06/2025 
+/*
+
 public class PaymentPanel extends JPanel {
     private JTextField amountField;
     private JTextField dateField;
