@@ -33,6 +33,7 @@ public class Main extends JFrame implements ActionListener {
     this.setLayout(null);
     this.setSize(1200,700);
     this.setTitle("Animal Clinic Management System");
+    this.setIconImage(new ImageIcon("./images/pet_image_1280px.png").getImage());
 
     // Side Bar panel
     sideBarPanel = new JPanel();
