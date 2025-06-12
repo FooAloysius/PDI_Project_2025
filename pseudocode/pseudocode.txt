@@ -3,6 +3,14 @@ Created: 24/05/2025
 Modified: 25/05/2025
 CLASS Main:
   Class Feild:
+    
+
+Author: Foo
+Purpose: All the method for initialize and accessing/mutating all the info (pet, petOwner)
+Created: 12/06/2025
+Modified:12/06/2025
+CLASS Data:
+  Class Feild:
     DECLARE CSVPath as String = 'csv/'
     DECLARE PetsFileName as String = 'Pets.csv'
     DECLARE CustomersFileName as String = 'Customers.csv'
@@ -18,12 +26,13 @@ CLASS Main:
     DECLARE PetFilePath as String = CSVPath + PetsFileName
     petCount = 0
 
-    OPEN PetFilePath FOR READING WHILE EOF(PetsFilePath)
+    OPEN PetFilePath FOR READING 
+    WHILE EOF(PetsFilePath)
     DECLARE line as String
     WHILE NOT EOF(PetsFilePath)
       READ line
 
-      IF (TRIM of line ISEMPTY) OR (line CONTAINS " ," OR ", " ) OR (line NOT CONTAINS "," ):
+      IF line IS EMPTY OR line DOES NOT CONTAIN "," THEN:
         CONTINUE
 
       DECLARE parts AS STRING OF ARRAY = SPLIT line AS ","
@@ -41,20 +50,237 @@ CLASS Main:
       CONSTRUCT pets[petCount ++] USING petID, petName, petSpecies, petBreed, petAge, petOwnerID
 
     END WHILE
-    CLOSE PetsFilePath
-
-    DECLARE ARRAY OF PET
-
-    
+    CLOSE PetsFilePath    
 
     IF lineCount = 0 THEN
       OUTPUT "file is empty!"
       RETURN
     END IF
 
-    
+  PROCEDURE: ImportCustomers
+  IMPORT: fileName
+  EXPORT: none
+  ALGORITHM:
+    DECLARE CustomerFilePath AS STRING = CSVPath + CustomersFileName
+    DECLARE customerCount AS INTEGER = 0
 
+    OPEN CustomerFilePath FOR READING
+    WHILE NOT EOF(CustomerFilePath)
+      DECLARE line AS STRING
+      READ line
 
+      IF line IS EMPTY OR line DOES NOT CONTAIN "," THEN:
+        CONTINUE
+
+      IF line CONTAINS " ," OR ", " THEN:
+        CONTINUE
+
+      DECLARE parts AS ARRAY OF STRING = SPLIT line BY ","
+
+      IF LENGTH OF parts NOT EQUAL TO 3:
+        CONTINUE
+
+      DECLARE petOwnerID AS STRING = TRIM(parts[0])
+      DECLARE petOwnerName AS STRING = TRIM(parts[1])
+      DECLARE petOwnerContact AS INTEGER
+
+      TRY
+        petOwnerContact = PARSE INT FROM TRIM(parts[2])
+        CONSTRUCT customers[customerCount++] USING petOwnerID, petOwnerName, petOwnerContact
+      CATCH NumberFormatException
+        OUTPUT error message
+
+    END WHILE
+    CLOSE CustomerFilePath
+
+    IF customerCount == 0 THEN
+      OUTPUT "file is empty!"
+      RETURN
+    END IF
+
+    PROCEDURE: getCustomers
+    PURPOSE: Return the full list of PetOwner customers
+    IMPORT: none
+    EXPORT: List of PetOwner
+    ALGORITHM:
+      RETURN customers
+
+    PROCEDURE: getCustomerSize
+    PURPOSE: Return the total number of PetOwner customers
+    IMPORT: none
+    EXPORT: INTEGER (number of customers)
+    ALGORITHM:
+      RETURN SIZE OF customers
+
+    PROCEDURE: getCustomersNameList
+    PURPOSE: Return list of all customer names
+    IMPORT: none
+    EXPORT: ARRAY OF STRING (customer names)
+    ALGORITHM:
+      DECLARE customersName AS ARRAY OF STRING WITH SIZE getCustomerSize()
+      FOR i FROM 0 TO getCustomerSize() - 1 DO
+        customersName[i] = customers[i].petOwnerName
+      END FOR
+      RETURN customersName
+
+    PROCEDURE: getCustomerID
+    PURPOSE: Return customer ID at specific index (used when creating Pet)
+    IMPORT: index (INTEGER)
+    EXPORT: STRING (customerID)
+    ALGORITHM:
+      DECLARE customer AS PetOwner = customers[index]
+      RETURN customer.petOwnerID
+
+    PROCEDURE: getCustomerNameByIndex
+    PURPOSE: Return customer name by finding petOwnerID from pet (used in treatment)
+    IMPORT: index (INTEGER, index in pets array)
+    EXPORT: STRING (customer name)
+    ALGORITHM:
+      DECLARE customerID AS STRING = pets[index].petOwnerID
+  
+      FOR EACH customer IN customers DO
+        IF customer.petOwnerID == customerID THEN
+          RETURN customer.petOwnerName
+        END IF
+      END FOR
+  
+      RETURN "-"
+
+    PROCEDURE: getCustomerNameByID
+    PURPOSE: Return customer name by customerID (used in PetPage)
+    IMPORT: customerID (STRING)
+    EXPORT: STRING (customer name)
+    ALGORITHM:
+      FOR EACH customer IN customers DO
+        IF customer.petOwnerID == customerID THEN
+          RETURN customer.petOwnerName
+        END IF
+      END FOR
+  
+      RETURN "-"
+
+    PROCEDURE: saveCustomers
+    PURPOSE: Save all customers data to CSV file
+    IMPORT: none
+    EXPORT: none
+    ALGORITHM:
+      DECLARE filePath AS STRING = CSVPath + CustomersFileName
+  
+      OPEN filePath FOR WRITING (overwrite mode)
+      FOR EACH customer IN customers DO
+        WRITE LINE: customer.petOwnerID + "," + customer.petOwnerName + "," + customer.petOwnerContact
+      END FOR
+      CLOSE file
+      IF error occurs THEN
+        OUTPUT error message
+
+    PROCEDURE: createCustomer
+    PURPOSE: Create a new PetOwner customer and add to list
+    IMPORT: petOwnerID (STRING), petOwnerName (STRING), petOwnerContact (INTEGER)
+    EXPORT: none
+    ALGORITHM:
+      CONSTRUCT newCustomer USING petOwnerID, petOwnerName, petOwnerContact
+      ADD newCustomer TO customers
+
+    PROCEDURE: removeCustomer
+    PURPOSE: Remove a customer from the list and save updated data
+    IMPORT: customer (PetOwner object)
+    EXPORT: none
+    ALGORITHM:
+      REMOVE customer FROM customers
+      CALL saveCustomers()
+
+    PROCEDURE: modifyCustomerDetails (name)
+    PURPOSE: Modify customer name and save updated data
+    IMPORT: name (STRING), customer (PetOwner object)
+    EXPORT: none
+    ALGORITHM:
+      SET customer.petOwnerName = name
+      CALL saveCustomers()
+
+    PROCEDURE: modifyCustomerDetails (contact)
+    PURPOSE: Modify customer contact and save updated data
+    IMPORT: contact (INTEGER), customer (PetOwner object)
+    EXPORT: none
+    ALGORITHM:
+      SET customer.petOwnerContact = contact
+      CALL saveCustomers()
+
+    PROCEDURE: getPets
+    PURPOSE: Return the full list of pets
+    IMPORT: none
+    EXPORT: List of Pet
+    ALGORITHM:
+      RETURN pets
+
+    PROCEDURE: getPetSize
+    PURPOSE: Return total number of pets
+    IMPORT: none
+    EXPORT: INTEGER
+    ALGORITHM:
+      RETURN SIZE OF pets
+
+    PROCEDURE: getPetsNameList
+    PURPOSE: Return list of all pet names
+    IMPORT: none
+    EXPORT: ARRAY OF STRING
+    ALGORITHM:
+      DECLARE petsName AS ARRAY OF STRING WITH SIZE getPetSize()
+      FOR i FROM 0 TO getPetSize() - 1 DO
+        petsName[i] = pets[i].petName
+      END FOR
+      RETURN petsName
+
+    PROCEDURE: savePets
+    PURPOSE: Save all pet data to CSV file
+    IMPORT: none
+    EXPORT: none
+    ALGORITHM:
+      DECLARE filePath AS STRING = CSVPath + PetsFileName
+  
+      OPEN filePath FOR WRITING (overwrite mode)
+      FOR EACH pet IN pets DO
+        WRITE LINE: petID + "," + petName + "," + petSpecies + "," + petBreed + "," + petAge + "," + petOwnerID
+      END FOR
+      CLOSE file
+      IF error occurs THEN
+        OUTPUT error message
+
+    PROCEDURE: createPet
+    PURPOSE: Create a new pet and save to CSV
+    IMPORT: petID (STRING), petName (STRING), petSpecies (STRING), petBreed (STRING), petAge (INTEGER), petOwnerID (STRING)
+    EXPORT: none
+    ALGORITHM:
+      CONSTRUCT newPet USING petID, petName, petSpecies, petBreed, petAge, petOwnerID
+      ADD newPet TO pets
+      CALL savePets()
+
+    PROCEDURE: removePet
+    PURPOSE: Remove a pet and save updated data
+    IMPORT: pet (Pet object)
+    EXPORT: none
+    ALGORITHM:
+      REMOVE pet FROM pets
+      CALL savePets()
+
+    PROCEDURE: modifyPet
+    PURPOSE: Modify pet details and save updated data
+    IMPORT: petName (STRING), petSpecies (STRING), petBreed (STRING), petAge (INTEGER), pet (Pet object)
+    EXPORT: none
+    ALGORITHM:
+      SET pet.petName = petName
+      SET pet.petSpecies = petSpecies
+      SET pet.petBreed = petBreed
+      SET pet.petAge = petAge
+      CALL savePets()
+
+    PROCEDURE: init
+    PURPOSE: Initialize all data from CSV files
+    IMPORT: none
+    EXPORT: none
+    ALGORITHM:
+      CALL importPets()
+      CALL importCustomers()
 
 Author: Foo
 Purpose: All the method for accessing/mutating pet owner info
