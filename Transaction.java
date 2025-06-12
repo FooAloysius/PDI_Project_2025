@@ -34,7 +34,7 @@ public class  Transaction {
         this.treatmentList = copy.getTreatmentList();
         this.totalAmount = copy.calculateTotalAmount();
         this.consultationFee = copy.getConsultationFee();
-        this.taxAmount = this.totalAmount * 0.06;
+        this.taxAmount = this.totalAmount * 0.10;
         this.finalAmount = this.totalAmount + this.taxAmount + this.consultationFee;
     }
 
@@ -83,7 +83,7 @@ public class  Transaction {
 
     // Calculate finalAmount
     public double calculateFinalAmount() {
-        this.taxAmount = totalAmount * 0.06;
+        this.taxAmount = totalAmount * 0.10;
         this.finalAmount = totalAmount + taxAmount + consultationFee;
         return finalAmount;
     }
