@@ -98,7 +98,7 @@ public class TreatmentTransactionPanel extends JPanel {
         
         subtotalLabel = new JLabel("Subtotal: RM 0.00");
         bottomPanel.add(subtotalLabel);
-        taxLabel = new JLabel("Tax (6%): RM 0.00");
+        taxLabel = new JLabel("Tax (10%): RM 0.00");
         bottomPanel.add(taxLabel);
         totalLabel = new JLabel("Grand Total: RM 0.00");
         bottomPanel.add(totalLabel);
@@ -146,7 +146,7 @@ public class TreatmentTransactionPanel extends JPanel {
                 subtotal += treatmentList.get(row).getTreatmentFee();
             }
 
-            double tax = subtotal * 0.06;
+            double tax = subtotal * 0.10;
             double grandTotal = subtotal + tax + consultationFee;
     
             // UPDATE shared variable for use in PaymentPanel
@@ -154,7 +154,7 @@ public class TreatmentTransactionPanel extends JPanel {
 
             //Update Summary Labels 
             subtotalLabel.setText(String.format("Subtotal: RM %.2f", subtotal));
-            taxLabel.setText(String.format("Tax (6%%): RM %.2f", tax));
+            taxLabel.setText(String.format("Tax (10%%): RM %.2f", tax));
             totalLabel.setText(String.format("Grand Total: RM %.2f", grandTotal));
         } catch (NumberFormatException ex) {
             JOptionPane.showMessageDialog(this, "Invalid consultation fee.");
