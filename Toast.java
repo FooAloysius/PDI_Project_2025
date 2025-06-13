@@ -3,16 +3,16 @@ import javax.swing.*;
 
 public class Toast {
   private static JWindow toastWindow;
-  private static Window mainWindow; // 全局主窗口引用
+  private static Window mainWindow;
 
-  // 初始化一次主窗口（推荐在 Main.java 中调用）
+  // initialize main window (JFrame)
   public static void setMainWindow(Window window) {
     Toast.mainWindow = window;
   }
 
   public static void showToast(String message, int durationMillis) {
     if (mainWindow == null) {
-      throw new IllegalStateException("Toast main window not set. Call Toast.setMainWindow(...) first.");
+      throw new IllegalStateException("Toast main window not set. Call Toast.setMainWindow(frame) first.");
     }
 
     if (toastWindow != null && toastWindow.isVisible()) {
@@ -34,8 +34,8 @@ public class Toast {
     toastWindow.add(panel);
     toastWindow.pack();
 
-    int x = mainWindow.getX() + (mainWindow.getWidth() - toastWindow.getWidth()) / 2;
-    int y = mainWindow.getY() + mainWindow.getHeight() - toastWindow.getHeight() - 80;
+    int x = mainWindow.getX() + mainWindow.getWidth() - 200;
+    int y = mainWindow.getY()+ mainWindow.getHeight() - 150;
     toastWindow.setLocation(x, y);
 
     toastWindow.setAlwaysOnTop(true);
