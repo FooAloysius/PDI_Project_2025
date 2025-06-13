@@ -16,7 +16,7 @@ Created: 15/05/2025
 Modified: 12/06/2025 
 */  
     
-    public ReceiptPanel(List<String> treatments, double grandAmount, String paymentMethod, double paidAmount) {
+    public ReceiptPanel(List<String[]> treatments, double grandAmount, String paymentMethod, double paidAmount) {
         this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         this.setBorder(BorderFactory.createEmptyBorder(20, 40, 20, 40));
 
@@ -39,10 +39,10 @@ Modified: 12/06/2025
         receiptText.append("Date            : ").append(paymentDate).append("\n");
         receiptText.append("Payment Method  : ").append(paymentMethod).append("\n");
         receiptText.append("--------------------------------------------\n");
-        receiptText.append("Selected Treatments:\n");
+        receiptText.append("Selected Treatments (Sorted):\n");
 
-        for (String treatment : treatments) {
-            receiptText.append(" - ").append(treatment).append("\n");
+        for (String[] treatment : treatments) {
+            receiptText.append(" - (").append(treatment[0]).append(") ").append(treatment[1]).append("\n");
         }
 
         receiptText.append("--------------------------------------------\n");

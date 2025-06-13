@@ -5,7 +5,14 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.List;
 import javax.swing.*;
+import javax.swing.border.Border;
+import javax.swing.border.EtchedBorder;
 
+/*
+* AUTHOR: Foo
+* CREATED: 25/05/2025
+* MODIFIED: 13/06/2025
+*/
 public class PetPage {
   JPanel mainPanel;
   JPanel modal;
@@ -184,10 +191,24 @@ public class PetPage {
     panel.setLayout(new BoxLayout(panel, BoxLayout.PAGE_AXIS));
 
     petList = petList(data);
-    createPetBtn = makeCreatePetBtn(data);
+    ImageIcon plusIcon = new ImageIcon(((new ImageIcon("./icons/plus_icon_229px.png")).getImage()).getScaledInstance(30, 30, java.awt.Image.SCALE_SMOOTH));
+    createPetBtn = new JButton("Add New Pet", plusIcon);
+    createPetBtn = new JButton("Create New Customer",plusIcon);
+    createPetBtn.setBackground(new Color(211, 159, 90));
+    Border raisedetched = BorderFactory.createEtchedBorder(EtchedBorder.RAISED);
+    createPetBtn.setBorder(raisedetched);
+    createPetBtn.setCursor(new Cursor(Cursor.HAND_CURSOR));
+    createPetBtn.addActionListener(e -> {
+      mainPanel.removeAll();
+      petCreate = petCreate(data);
+      mainPanel.add(petCreate);
+      mainPanel.revalidate();
+      mainPanel.repaint();
+    });
+    
 
-    panel.add(petList);
     panel.add(createPetBtn);
+    panel.add(petList);
     panel.revalidate();
     panel.repaint();
   }
@@ -197,10 +218,9 @@ public class PetPage {
     mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.PAGE_AXIS));
 
     petList = petList(data);
-    createPetBtn = makeCreatePetBtn(data);
 
-    mainPanel.add(petList);
     mainPanel.add(createPetBtn);
+    mainPanel.add(petList);
     mainPanel.revalidate();
     mainPanel.repaint();
   }
@@ -236,18 +256,5 @@ public class PetPage {
     panel.add(jLabel);
     panel.add(jComboBox);
     return jComboBox;
-  }
-
-  private JButton makeCreatePetBtn(Data data) {
-    JButton jButton = new JButton("Add New Pet");
-    jButton.addActionListener(e -> {
-      mainPanel.removeAll();
-      petCreate = petCreate(data);
-      mainPanel.add(petCreate);
-      mainPanel.revalidate();
-      mainPanel.repaint();
-    });
-
-    return jButton;
   }
 }

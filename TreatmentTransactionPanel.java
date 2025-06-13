@@ -2,6 +2,7 @@ import java.awt.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -79,16 +80,12 @@ public class TreatmentTransactionPanel extends JPanel {
         bottomPanel.add(consultationField);
 
         // added treatments list choosen
-        // List<String> selectedTreatments = getSelectedTreatmentNames();
         selectedtreatmentsPanel = new JPanel();
         selectedtreatmentsPanel.setPreferredSize(new Dimension(180,400));
-        selectedtreatmentsPanel.setBorder(BorderFactory.createTitledBorder("Treatment Selected"));
+        selectedtreatmentsPanel.setBorder(BorderFactory.createTitledBorder("Treatment Selected (Sorted)"));
 
         selectedTreatmentsList = new JPanel();
         selectedTreatmentsList.setLayout(new BoxLayout(selectedTreatmentsList, BoxLayout.Y_AXIS));
-        // for (String treatment: selectedTreatments) {
-        //     selectedTreatmentsList.add(new JLabel(treatment));
-        // }
         selectedtreatmentsPanel.add(selectedTreatmentsList);
 
         
@@ -132,8 +129,14 @@ public class TreatmentTransactionPanel extends JPanel {
             // added treatments list selected
             selectedTreatmentsList.removeAll();
 
-            for (int row : selectedRows) {
-                selectedTreatmentsList.add(new JLabel(treatmentList.get(row).getTreatmentName() + ": " + treatmentList.get(row).getTreatmentFee()));
+            List<String[]> selectedTreatments = new ArrayList<>();
+            for (int row: selectedRows) {
+                selectedTreatments.add(new String[] {treatmentList.get(row).getTreatmentID(), treatmentList.get(row).getTreatmentName(), String.valueOf(treatmentList.get(row).getTreatmentFee())});
+            }
+            selectedTreatments.sort(Comparator.comparing(treatment -> treatment[1])); // sorting selected treatments
+            
+            for (String[] treatment : selectedTreatments) {
+                selectedTreatmentsList.add(new JLabel("(" + treatment[0] + ") " + treatment[1] + ": " + treatment[2]));
             }
 
             //Subtotal Calculation 
@@ -167,15 +170,20 @@ public class TreatmentTransactionPanel extends JPanel {
         panel.repaint();
     }
 
-    // utility for receipt part
-    public List<String> getSelectedTreatmentNames() {
+    // utility for receipt
+    public List<String[]> getSelectedTreatmentNames() {
         int[] selectedRows = table.getSelectedRows();
-        List<String> selectedTreatmentsName = new ArrayList<>();
+        List<String[]> selectedRecords = new ArrayList<>();
 
         for (int row : selectedRows) {
-            selectedTreatmentsName.add(treatmentList.get(row).getTreatmentName());
+            String treatmentID = treatmentList.get(row).getTreatmentID();
+            String treatmentName = treatmentList.get(row).getTreatmentName();
+            selectedRecords.add(new String[]{treatmentID, treatmentName});
         }
-        return selectedTreatmentsName;
+
+        selectedRecords.sort(Comparator.comparing(record -> record[1])); // sorting
+
+        return selectedRecords;
     }
 }
 

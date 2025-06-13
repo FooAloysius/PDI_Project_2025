@@ -11,6 +11,13 @@ import java.util.List;
  * https://www.w3schools.com/java/ref_string_format.asp
  */
 
+/*
+* AUTHOR: Foo
+* For centralize the data for whole program (import csv data and update csv data for pet and pet owner)
+* CREATED: 11/06/2025
+* MODIFIED: 13/06/2025
+*/
+
 public class Data {
   public static String CSVPath = "csv/";
   public static String PetsFileName = "Pets.csv";
@@ -164,6 +171,7 @@ public class Data {
   // method for create new customer
   public void createCustomer (String petOwnerID, String petOwnerName, int petOwnerContact) {
     customers.add(new PetOwner(petOwnerID, petOwnerName, petOwnerContact));
+    saveCustomers();
     Toast.showToast(petOwnerName + " Created!", 2000);
   }
 

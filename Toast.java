@@ -1,6 +1,10 @@
 import java.awt.*;
 import javax.swing.*;
-
+/*
+* AUTHOR: Foo
+* CREATED: 13/06/2025
+* MODIFIED: 13/06/2025
+*/
 public class Toast {
   private static JWindow toastWindow;
   private static Window mainWindow;
@@ -12,7 +16,7 @@ public class Toast {
 
   public static void showToast(String message, int durationMillis) {
     if (mainWindow == null) {
-      throw new IllegalStateException("Toast main window not set. Call Toast.setMainWindow(frame) first.");
+      throw new IllegalStateException("Toast main window not set. Please Call Toast.setMainWindow(frame) first.");
     }
 
     if (toastWindow != null && toastWindow.isVisible()) {

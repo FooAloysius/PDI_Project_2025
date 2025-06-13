@@ -1,0 +1,14 @@
+Date            : 13/06/2025
+Payment Method  : Cash
+--------------------------------------------
+Selected Treatments (Sorted):
+ - (T003) Deworming
+ - (T019) Ear Cleaning
+ - (T010) Flea Treatment
+--------------------------------------------
+Grand Amount    : RM 456.30
+Amount Paid     : RM 456.50
+Balance         : RM 0.20
+Status          : PAID
+--------------------------------------------
+   Thank you for visiting our clinic! 

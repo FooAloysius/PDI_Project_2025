@@ -6,17 +6,22 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.List;
 import javax.swing.*;
+import javax.swing.border.Border;
+ import javax.swing.border.EtchedBorder;
+
+// REFERENCE https://docs.oracle.com/javase/tutorial/uiswing/components/border.html
 /*
- * https://www.tutorialspoint.com/awt/awt_focusadapter.htm
- * 
- * 
- */
+* AUTHOR: Foo
+* CREATED: 10/06/2025
+* MODIFIED: 13/06/2025
+*/
 
 public class CustomerPage {
   JPanel mainPanel;
   JPanel modal;
   JPanel customerList;
   JPanel customerCreate;
+  JButton createCustomerBtn;
   Color LIGHTBEACH = new Color(255, 254, 236);
   Color WHITE = new Color(255, 254, 242);
 
@@ -214,7 +219,13 @@ public class CustomerPage {
     panel.setLayout(new BoxLayout(panel, BoxLayout.PAGE_AXIS));
 
     customerList = customerList(data);
-    JButton createCustomerBtn = new JButton("Create New Customer");
+
+    ImageIcon plusIcon = new ImageIcon(((new ImageIcon("./icons/plus_icon_229px.png")).getImage()).getScaledInstance(30, 30, java.awt.Image.SCALE_SMOOTH));
+    createCustomerBtn = new JButton("Create New Customer",plusIcon);
+    createCustomerBtn.setBackground(new Color(211, 159, 90));
+    Border raisedetched = BorderFactory.createEtchedBorder(EtchedBorder.RAISED);
+    createCustomerBtn.setBorder(raisedetched);
+    createCustomerBtn.setCursor(new Cursor(Cursor.HAND_CURSOR));
     createCustomerBtn.addActionListener(e -> {
       mainPanel.removeAll();
       customerCreate = customerCreate(data);
@@ -223,8 +234,8 @@ public class CustomerPage {
       mainPanel.repaint();
     });
 
-    panel.add(customerList);
     panel.add(createCustomerBtn);
+    panel.add(customerList);
     panel.revalidate();
     panel.repaint();
   } 
@@ -234,17 +245,17 @@ public class CustomerPage {
     mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.PAGE_AXIS));
 
     customerList = customerList(data);
-    JButton createCustomerBtn = new JButton("Create New Customer");
-    createCustomerBtn.addActionListener(e -> {
-      mainPanel.removeAll();
-      customerCreate = customerCreate(data);
-      mainPanel.add(customerCreate);
-      mainPanel.revalidate();
-      mainPanel.repaint();
-    });
+    // createCustomerBtn = new JButton("Create New Customer");
+    // createCustomerBtn.addActionListener(e -> {
+    //   mainPanel.removeAll();
+    //   customerCreate = customerCreate(data);
+    //   mainPanel.add(customerCreate);
+    //   mainPanel.revalidate();
+    //   mainPanel.repaint();
+    // });
 
-    mainPanel.add(customerList);
     mainPanel.add(createCustomerBtn);
+    mainPanel.add(customerList);
     mainPanel.revalidate();
     mainPanel.repaint();
   } 

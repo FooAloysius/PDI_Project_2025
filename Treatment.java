@@ -12,21 +12,21 @@ public class Treatment {
     private String treatmentName;
     private double treatmentFee;
 
-    // 1. Default Constructor
+    // Default Constructor
     public Treatment() {
         this.treatmentID = "";
         this.treatmentName = "";
         this.treatmentFee = 0.0;
     }
 
-    // 2. Parameterized Constructor
+    // Parameterized Constructor
     public Treatment(String id, String name, double fee) {
         setTreatmentID(id);
         setTreatmentName(name);
         setTreatmentFee(fee);
     }
 
-    // 3. Copy Constructor
+    // Copy Constructor
     public Treatment(Treatment copy) {
         this.treatmentID = copy.getTreatmentID();
         this.treatmentName = copy.getTreatmentName();
@@ -94,7 +94,7 @@ public class Treatment {
         return treatmentList;
     }
 
-    // Optional: helpful for displaying in combo box or logs
+    // For displaying in combo box or logs
     @Override
     public String toString() {
         return treatmentName + " (RM " + String.format("%.2f", treatmentFee) + ")";
